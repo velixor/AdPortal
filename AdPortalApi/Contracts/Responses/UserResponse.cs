@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AdPortalApi.Dtos
+namespace AdPortalApi.Contracts.Responses
 {
-    public class UserGet
+    public class UserResponse
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<Guid> AdsId { get; set; }
     }
 }

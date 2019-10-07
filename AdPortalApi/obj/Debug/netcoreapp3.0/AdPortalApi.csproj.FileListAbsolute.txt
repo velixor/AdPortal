@@ -120,21 +120,6 @@ C:\Users\velixor\source\repos\csharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.
 C:\Users\velixor\source\repos\csharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\velixor\source\repos\csharp\AdPortal\AdPortalApi\obj\Debug\netcoreapp3.0\AdPortalApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\velixor\source\repos\csharp\AdPortal\AdPortalApi\obj\Debug\netcoreapp3.0\AdPortalApi.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Caching.Abstractions.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Configuration.Binder.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Logging.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Logging.Debug.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Options.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.Extensions.Primitives.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\System.Collections.Immutable.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\System.ComponentModel.Annotations.dll
-C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.IdentityModel.Logging.dll
@@ -143,3 +128,4 @@ C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\Swashbuckle.AspNetCore.dll
+C:\Users\velixor\source\repos\CSharp\AdPortal\AdPortalApi\bin\Debug\netcoreapp3.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

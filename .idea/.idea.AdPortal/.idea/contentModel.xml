@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
+    <e p="C:\Users\velixor\.Rider2019.2\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\velixor\.Rider2019.2\config\extensions" t="IncludeRecursive" />
     <e p="C:\Users\velixor\.Rider2019.2\config\scratches" t="IncludeRecursive" />
     <e p="C:\Users\velixor\.Rider2019.2\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\velixor\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_AdPortal.1550202007.00" t="ExcludeRecursive" />
@@ -12,6 +14,19 @@
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Configurations" t="Include">
+          <e p="UserConfigs.cs" t="Include" />
+        </e>
+        <e p="Contracts" t="Include">
+          <e p="Requests" t="Include">
+            <e p="AdRequest.cs" t="Include" />
+            <e p="UserRequest.cs" t="Include" />
+          </e>
+          <e p="Responses" t="Include">
+            <e p="AdResponse.cs" t="Include" />
+            <e p="UserResponse.cs" t="Include" />
+          </e>
+        </e>
         <e p="Controllers" t="Include">
           <e p="AdsController.cs" t="Include" />
           <e p="UsersController.cs" t="Include" />
@@ -24,11 +39,9 @@
             <e p="AdPortalContextModelSnapshot.cs" t="Include" />
           </e>
         </e>
-        <e p="Dtos" t="Include">
-          <e p="AdGet.cs" t="Include" />
-          <e p="AdPost.cs" t="Include" />
-          <e p="UserGet.cs" t="Include" />
-          <e p="UserPost.cs" t="Include" />
+        <e p="Mapping" t="Include">
+          <e p="DomainToResponseProfile.cs" t="Include" />
+          <e p="RequestToDomainProfile.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
           <e p="Ad.cs" t="Include" />
@@ -44,6 +57,12 @@
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="AdService.cs" t="Include" />
+          <e p="IAdService.cs" t="Include" />
+          <e p="IUserService.cs" t="Include" />
+          <e p="UserService.cs" t="Include" />
         </e>
         <e p="Startup.cs" t="Include" />
       </e>

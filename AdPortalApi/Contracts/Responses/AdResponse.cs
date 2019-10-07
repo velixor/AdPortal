@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace AdPortalApi.Dtos
+namespace AdPortalApi.Contracts.Responses
 {
-    public class AdGet
+    public class AdResponse
     {
         public Guid Id { get; set; }
         public int Number { get; set; }
