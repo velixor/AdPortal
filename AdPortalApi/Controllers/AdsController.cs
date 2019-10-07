@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdPortalApi.Contracts.Requests;
+using AdPortalApi.Contracts.Responses;
 using AdPortalApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AdPortalApi.Models;
+using AdPortalApi.Services;
+using AutoMapper;
 
 namespace AdPortalApi.Controllers
 {
@@ -13,105 +17,65 @@ namespace AdPortalApi.Controllers
     [ApiController]
     public class AdsController : ControllerBase
     {
-        private readonly AdPortalContext _context;
-
-        public AdsController(AdPortalContext context)
+        private readonly IAdService _adService;
+        private readonly IMapper _mapper;
+        private string BaseUrl =>
+            $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}/api/ads";
+        public AdsController(IAdService adService, IMapper mapper)
         {
-            _context = context;
+            _adService = adService;
+            _mapper = mapper;
         }
 
-        // GET: api/Ads
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ad>>> GetAds()
+        public async Task<ActionResult<List<AdResponse>>> Get()
         {
-            return await _context.Ads.ToListAsync();
+            var ads = await _adService.GetAllAdsAsync();
+            return Ok(_mapper.Map<List<AdResponse>>(ads));
         }
 
-        // GET: api/Ads/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ad>> GetAd(Guid id)
+        public async Task<ActionResult<AdResponse>> Get([FromRoute]Guid id)
         {
-            var ad = await _context.Ads.FindAsync(id);
+            var ad = await _adService.GetAdByIdAsync(id);
 
             if (ad == null)
-            {
                 return NotFound();
-            }
 
-            return ad;
+            return Ok(_mapper.Map<AdResponse>(ad));
         }
 
-        // PUT: api/Ads/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAd(Guid id, Ad ad)
+        [HttpPost]
+        public async Task<ActionResult<AdResponse>> Post(AdRequest ad)
         {
-            if (id != ad.Id)
-            {
+            var newAd = await _adService.PostNewAdAsync(_mapper.Map<Ad>(ad));
+            if (newAd == null)
                 return BadRequest();
-            }
+            var uri = BaseUrl + $"/{newAd.Id}";
+            return Created(uri, _mapper.Map<AdResponse>(newAd));
+        }
 
-            _context.Entry(ad).State = EntityState.Modified;
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(Guid id, AdRequest ad)
+        {
+            var newAd = _mapper.Map<Ad>(ad);
+            newAd.Id = id;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AdExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var modified = await _adService.UpdateAdAsync(newAd);
+
+            if (!modified)
+                return NotFound();
 
             return NoContent();
         }
-
-        // POST: api/Ads
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<Ad>> PostAd(Ad ad)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == ad.User.Id);
-            if (user is null)
-            {
-                return StatusCode(418);
-            }
-
-            ad.User = user;
-
-            _context.Ads.Add(ad);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAd", new { id = ad.Id }, ad);
-        }
-
-        // DELETE: api/Ads/5
+        
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Ad>> DeleteAd(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            var ad = await _context.Ads.FindAsync(id);
-            if (ad == null)
-            {
+            if (!await _adService.DeleteAdByIdAsync(id))
                 return NotFound();
-            }
 
-            _context.Ads.Remove(ad);
-            await _context.SaveChangesAsync();
-
-            return ad;
-        }
-
-        private bool AdExists(Guid id)
-        {
-            return _context.Ads.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

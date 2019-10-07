@@ -15,6 +15,19 @@
           "lib/netstandard2.0/AutoMapper.dll": {}
         }
       },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/7.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "9.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        }
+      },
       "FluentValidation/8.5.0": {
         "type": "package",
         "dependencies": {
@@ -3196,6 +3209,19 @@
         "lib/netstandard2.0/AutoMapper.dll",
         "lib/netstandard2.0/AutoMapper.pdb",
         "lib/netstandard2.0/AutoMapper.xml"
+      ]
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/7.0.0": {
+      "sha512": "szI4yeRIM7GWe9JyekW0dKYehPB0t6M+I55fPeCebN6PhS7zQZa0eG3bgOnOx+eP3caSNoE7KEJs2rk7MLsh8w==",
+      "type": "package",
+      "path": "automapper.extensions.microsoft.dependencyinjection/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
+        "automapper.extensions.microsoft.dependencyinjection.nuspec",
+        "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll",
+        "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.pdb"
       ]
     },
     "FluentValidation/8.5.0": {
@@ -9807,6 +9833,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
       "AutoMapper >= 9.0.0",
+      "AutoMapper.Extensions.Microsoft.DependencyInjection >= 7.0.0",
       "FluentValidation.AspNetCore >= 8.5.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.0.0",
       "Microsoft.CodeAnalysis.FxCopAnalyzers >= 2.9.4",
@@ -9826,11 +9853,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\velixor\\source\\repos\\CSharp\\AdPortal\\AdPortalApi\\AdPortalApi.csproj",
+      "projectUniqueName": "C:\\Users\\velixor\\source\\repos\\csharp\\AdPortal\\AdPortalApi\\AdPortalApi.csproj",
       "projectName": "AdPortalApi",
-      "projectPath": "C:\\Users\\velixor\\source\\repos\\CSharp\\AdPortal\\AdPortalApi\\AdPortalApi.csproj",
+      "projectPath": "C:\\Users\\velixor\\source\\repos\\csharp\\AdPortal\\AdPortalApi\\AdPortalApi.csproj",
       "packagesPath": "C:\\Users\\velixor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\velixor\\source\\repos\\CSharp\\AdPortal\\AdPortalApi\\obj\\",
+      "outputPath": "C:\\Users\\velixor\\source\\repos\\csharp\\AdPortal\\AdPortalApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -9863,6 +9890,10 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[9.0.0, )"
+          },
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "target": "Package",
+            "version": "[7.0.0, )"
           },
           "FluentValidation.AspNetCore": {
             "target": "Package",
@@ -9920,7 +9951,16 @@
           "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

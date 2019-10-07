@@ -11,6 +11,6 @@ namespace AdPortalApi.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Ad> Ads { get; set; } = new List<Ad>();
+        public ICollection<Ad> Ads { get; set; }
     }
 }

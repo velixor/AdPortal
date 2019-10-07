@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace AdPortalApi.Dtos
+namespace AdPortalApi.Contracts.Requests
 {
-    public class AdPost
+    public class AdRequest
     {
+        public Guid UserId { get; set; }
         public string Content { get; set; }
         public string ImagePath { get; set; }
     }
