@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
@@ -7,6 +8,7 @@ using AdPortalApi.Services;
 using AutoMapper;
 using Dtos.Contracts.Requests;
 using Dtos.Contracts.Responses;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace AdPortalApi.Controllers
 {
@@ -17,13 +19,10 @@ namespace AdPortalApi.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        private string BaseUrl =>
-            $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}/api/users";
-
         public UsersController(IUserService userService, IMapper mapper)
         {
-            _userService = userService;
-            _mapper = mapper;
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -50,7 +49,7 @@ namespace AdPortalApi.Controllers
             var registeredUser = await _userService.RegisterNewUserAsync(_mapper.Map<User>(user));
             if (registeredUser == null)
                 return BadRequest();
-            var uri = BaseUrl + $"/{registeredUser.Id}";
+            var uri = $"{Request.GetEncodedUrl()}/{registeredUser.Id}";
             return Created(uri, _mapper.Map<UserResponse>(registeredUser));
         }
 
