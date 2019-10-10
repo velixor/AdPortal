@@ -25,9 +25,9 @@ namespace AdPortalApi
         {
             services.AddControllers();
 
-            var connectionString = Configuration.GetConnectionString("LocalServer");
+            var connectionString = Configuration.GetConnectionString("LocalPgSql");
             services.AddDbContext<AdPortalContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAdService, AdService>();
@@ -36,6 +36,8 @@ namespace AdPortalApi
             var userConfigs = new UserConfigs();
             Configuration.Bind(nameof(UserConfigs), userConfigs);
             services.AddSingleton(userConfigs);
+
+            services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
