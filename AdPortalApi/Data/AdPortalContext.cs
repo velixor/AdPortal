@@ -16,9 +16,6 @@ namespace AdPortalApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Ad>()
-                .Property(ad => ad.CreationDate)
-                .HasDefaultValueSql("GETDATE()");
-            modelBuilder.Entity<Ad>()
                 .Property(ad => ad.Rating)
                 .HasDefaultValue(0);
             modelBuilder.Entity<Ad>()
