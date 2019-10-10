@@ -5,6 +5,7 @@ using AdPortalApi.Configurations;
 using AdPortalApi.Data;
 using AdPortalApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace AdPortalApi.Services
 {
@@ -12,13 +13,13 @@ namespace AdPortalApi.Services
     {
         private readonly AdPortalContext _context;
         private readonly IUserService _userService;
-        private readonly UserConfigs _userConfigs;
+        private readonly IOptions<UserConfigs> _userConfigs;
 
-        public AdService(AdPortalContext context, IUserService userService, UserConfigs userConfigs)
+        public AdService(AdPortalContext context, IUserService userService, IOptions<UserConfigs> userConfigs)
         {
-            _context = context;
-            _userService = userService;
-            _userConfigs = userConfigs;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _userConfigs = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
         }
 
         public async Task<IEnumerable<Ad>> GetAllAdsAsync()
@@ -36,9 +37,11 @@ namespace AdPortalApi.Services
             if (!await _userService.IsUserExistAsync(ad.UserId))
                 return null;
 
-            var adCountOfUser = await _context.Ads.CountAsync(x => x.UserId == ad.UserId);
-            if (adCountOfUser >= _userConfigs.AdCountLimit)
+            var adCountOfUser = await _context.Ads.AsNoTracking().CountAsync(x => x.UserId == ad.UserId);
+            if (adCountOfUser >= _userConfigs.Value.AdCountLimit)
                 return null;
+
+            ad.CreationDate = DateTime.Now;
 
             var created = _context.Ads.Add(ad);
             if (!await TrySaveChangesAsync())
