@@ -58,10 +58,11 @@ namespace AdPortalApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, AdRequest ad)
         {
-            var newAd = _mapper.Map<Ad>(ad);
-            newAd.Id = id;
+            var newAdd = await _adService.GetAdByIdAsync(id);
+            newAdd.Content = ad.Content;
+            newAdd.ImagePath = ad.ImagePath;
 
-            var modified = await _adService.UpdateAdAsync(newAd);
+            var modified = await _adService.UpdateAdAsync(newAdd);
 
             if (!modified)
                 return NotFound();
