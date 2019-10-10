@@ -13,7 +13,7 @@ namespace AdPortalApi.Services
 
         public UserService(AdPortalContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
