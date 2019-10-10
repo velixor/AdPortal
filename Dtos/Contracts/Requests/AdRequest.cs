@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdPortalApi.Contracts.Requests
+namespace Dtos.Contracts.Requests
 {
     public class AdRequest
     {

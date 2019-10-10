@@ -1,6 +1,6 @@
-﻿using AdPortalApi.Contracts.Requests;
-using AdPortalApi.Models;
+﻿using AdPortalApi.Models;
 using AutoMapper;
+using Dtos.Contracts.Requests;
 
 namespace AdPortalApi.Mapping
 {
@@ -9,11 +9,7 @@ namespace AdPortalApi.Mapping
         public RequestToDomainProfile()
         {
             CreateMap<UserRequest, User>();
-            CreateMap<AdRequest, Ad>()
-                .ForMember(ad => ad.User, opt =>
-                {
-                    opt.MapFrom(src => new User {Id = src.UserId});
-                });
+            CreateMap<AdRequest, Ad>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdPortalApi.Contracts.Responses
+namespace Dtos.Contracts.Responses
 {
     public class AdResponse
     {

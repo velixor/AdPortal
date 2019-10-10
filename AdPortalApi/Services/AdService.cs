@@ -33,10 +33,10 @@ namespace AdPortalApi.Services
 
         public async Task<Ad> PostNewAdAsync(Ad ad)
         {
-            if (!await _userService.IsUserExistAsync(ad.User.Id))
+            if (!await _userService.IsUserExistAsync(ad.UserId))
                 return null;
 
-            var adCountOfUser = await _context.Ads.CountAsync(x => x.User.Id == ad.User.Id);
+            var adCountOfUser = await _context.Ads.CountAsync(x => x.UserId == ad.UserId);
             if (adCountOfUser >= _userConfigs.AdCountLimit)
                 return null;
 
@@ -51,11 +51,7 @@ namespace AdPortalApi.Services
         {
             if (!await IsAdExistAsync(ad.Id))
                 return false;
-            
-            var oldAd = await GetAdByIdAsync(ad.Id);
 
-            oldAd.Content = ad.Content;
-            oldAd.ImagePath = ad.ImagePath;
             
             return await TrySaveChangesAsync();
         }

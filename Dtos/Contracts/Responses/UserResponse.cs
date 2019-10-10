@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace AdPortalApi.Contracts.Responses
+namespace Dtos.Contracts.Responses
 {
     public class UserResponse
     {

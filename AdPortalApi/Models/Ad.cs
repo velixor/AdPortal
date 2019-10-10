@@ -9,6 +9,7 @@ namespace AdPortalApi.Models
         public Guid Id { get; set; }
         [Required]
         public int Number { get; set; }
+        public Guid UserId { get; set; }
         [Required]
         public User User { get; set; }
         [Required]

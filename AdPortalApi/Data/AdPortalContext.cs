@@ -25,8 +25,7 @@ namespace AdPortalApi.Data
                 .Property(ad => ad.Number)
                 .UseIdentityColumn();
             modelBuilder.Entity<Ad>()
-                .HasIndex(ad => ad.Number)
-                .IsUnique();
+                .HasIndex(ad => ad.Number);
 
             modelBuilder.Entity<User>()
                 .HasMany(user => user.Ads)

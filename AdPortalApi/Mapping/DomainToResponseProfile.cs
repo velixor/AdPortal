@@ -1,6 +1,6 @@
-﻿using AdPortalApi.Contracts.Responses;
-using AdPortalApi.Models;
+﻿using AdPortalApi.Models;
 using AutoMapper;
+using Dtos.Contracts.Responses;
 
 namespace AdPortalApi.Mapping
 {
@@ -9,11 +9,7 @@ namespace AdPortalApi.Mapping
         public DomainToResponseProfile()
         {
             CreateMap<User, UserResponse>();
-            CreateMap<Ad, AdResponse>()
-                .ForMember(adRes => adRes.UserId, opt =>
-                {
-                    opt.MapFrom(src => src.User.Id);
-                });
+            CreateMap<Ad, AdResponse>();
         }
     }
 }

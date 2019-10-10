@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AdPortalApi.Contracts.Requests;
-using AdPortalApi.Contracts.Responses;
-using AdPortalApi.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AdPortalApi.Models;
 using AdPortalApi.Services;
 using AutoMapper;
+using Dtos.Contracts.Requests;
+using Dtos.Contracts.Responses;
 
 namespace AdPortalApi.Controllers
 {

@@ -28,4 +28,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-beta" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dtos\Dtos.csproj" />
+  </ItemGroup>
+
 </Project>
