@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
@@ -26,31 +25,24 @@ namespace AdPortalApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<UserResponse>>> Get()
+        public async Task<List<UserResponse>> Get()
         {
             var users = await _userService.GetAllUsersAsync();
-            return Ok(_mapper.Map<List<UserResponse>>(users));
+            return _mapper.Map<List<UserResponse>>(users);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponse>> Get([FromRoute] Guid id)
+        public async Task<UserResponse> Get([FromRoute] Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(_mapper.Map<UserResponse>(user));
+            return _mapper.Map<UserResponse>(user);
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> Post([FromBody] UserRequest user)
+        public async Task<UserResponse> Post([FromBody] UserRequest user)
         {
             var registeredUser = await _userService.RegisterNewUserAsync(_mapper.Map<User>(user));
-            if (registeredUser == null)
-                return BadRequest();
-            var uri = $"{Request.GetEncodedUrl()}/{registeredUser.Id}";
-            return Created(uri, _mapper.Map<UserResponse>(registeredUser));
+            return _mapper.Map<UserResponse>(registeredUser);
         }
 
         [HttpPut("{id}")]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
@@ -8,7 +7,6 @@ using AdPortalApi.Services;
 using AutoMapper;
 using Dtos.Contracts.Requests;
 using Dtos.Contracts.Responses;
-using Microsoft.AspNetCore.Http.Extensions;
 
 namespace AdPortalApi.Controllers
 {
@@ -26,35 +24,28 @@ namespace AdPortalApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AdResponse>>> Get()
+        public async Task<List<AdResponse>> Get()
         {
             var ads = await _adService.GetAllAdsAsync();
-            return Ok(_mapper.Map<List<AdResponse>>(ads));
+            return _mapper.Map<List<AdResponse>>(ads);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AdResponse>> Get([FromRoute]Guid id)
+        public async Task<AdResponse> Get([FromRoute]Guid id)
         {
             var ad = await _adService.GetAdByIdAsync(id);
-
-            if (ad == null)
-                return NotFound();
-
-            return Ok(_mapper.Map<AdResponse>(ad));
+            return _mapper.Map<AdResponse>(ad);
         }
 
         [HttpPost]
-        public async Task<ActionResult<AdResponse>> Post(AdRequest ad)
+        public async Task<AdResponse> Post(AdRequest ad)
         {
             var newAd = await _adService.PostNewAdAsync(_mapper.Map<Ad>(ad));
-            if (newAd == null)
-                return BadRequest();
-            var uri = $"{Request.GetEncodedUrl()}/{newAd.Id}";
-            return Created(uri, _mapper.Map<AdResponse>(newAd));
+            return _mapper.Map<AdResponse>(newAd);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, AdRequest ad)
+        public async Task<ActionResult> Put(Guid id, AdRequest ad)
         {
             var newAdd = await _adService.GetAdByIdAsync(id);
             newAdd.Content = ad.Content;
