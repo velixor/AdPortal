@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dtos\Dtos.csproj" />
+    <ProjectReference Include="..\Dto\Dto.csproj" />
   </ItemGroup>
 
 </Project>
