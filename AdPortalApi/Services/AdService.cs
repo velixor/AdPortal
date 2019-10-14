@@ -80,7 +80,7 @@ namespace AdPortalApi.Services
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
                 return false;
             }
