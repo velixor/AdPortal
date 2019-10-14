@@ -1,4 +1,4 @@
-﻿namespace AdPortalApi.Configurations
+﻿﻿﻿namespace AdPortalApi.Configurations
 {
     public class UserConfigs
     {

@@ -1,14 +1,13 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
 using AdPortalApi.Services;
 using AutoMapper;
-using Dtos.Contracts.Requests;
-using Dtos.Contracts.Responses;
+ using Dto.Contracts.AdContracts;
 
-namespace AdPortalApi.Controllers
+ namespace AdPortalApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

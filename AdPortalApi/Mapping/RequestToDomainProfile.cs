@@ -1,8 +1,9 @@
-﻿using AdPortalApi.Models;
+﻿﻿using AdPortalApi.Models;
 using AutoMapper;
-using Dtos.Contracts.Requests;
+ using Dto.Contracts.AdContracts;
+ using Dto.Contracts.UserContracts;
 
-namespace AdPortalApi.Mapping
+ namespace AdPortalApi.Mapping
 {
     public class RequestToDomainProfile : Profile
     {

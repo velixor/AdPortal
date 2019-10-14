@@ -1,6 +1,6 @@
-﻿using System;
+﻿﻿using System;
 
-namespace Dtos.Contracts.Requests
+ namespace Dto.Contracts.AdContracts
 {
     public class AdRequest
     {

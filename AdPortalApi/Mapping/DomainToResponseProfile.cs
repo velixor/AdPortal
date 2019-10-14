@@ -1,6 +1,7 @@
 ﻿using AdPortalApi.Models;
 using AutoMapper;
-using Dtos.Contracts.Responses;
+using Dto.Contracts.AdContracts;
+using Dto.Contracts.UserContracts;
 
 namespace AdPortalApi.Mapping
 {

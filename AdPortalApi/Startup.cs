@@ -1,10 +1,9 @@
-using AdPortalApi.Configurations;
-using AdPortalApi.Data;
+﻿using AdPortalApi.Configurations;
+using AdPortalApi.Exstensions;
 using AdPortalApi.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,17 +24,11 @@ namespace AdPortalApi
         {
             services.AddControllers();
 
-            var connectionString = Configuration.GetConnectionString("LocalPgSql");
-            services.AddDbContext<AdPortalContext>(options =>
-                options.UseNpgsql(connectionString));
+            services.AddNpgsql(Configuration);
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAdService, AdService>();
             services.AddAutoMapper(typeof(Startup));
-
-            var userConfigs = new UserConfigs();
-            Configuration.Bind(nameof(UserConfigs), userConfigs);
-            services.AddSingleton(userConfigs);
 
             services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
         }

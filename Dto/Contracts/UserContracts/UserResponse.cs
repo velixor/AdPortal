@@ -1,6 +1,6 @@
-﻿using System;
+﻿﻿using System;
 
-namespace Dtos.Contracts.Responses
+ namespace Dto.Contracts.UserContracts
 {
     public class UserResponse
     {

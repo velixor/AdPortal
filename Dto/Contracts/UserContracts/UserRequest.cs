@@ -1,4 +1,4 @@
-﻿namespace Dtos.Contracts.Requests
+﻿﻿namespace Dto.Contracts.UserContracts
 {
     public class UserRequest
     {

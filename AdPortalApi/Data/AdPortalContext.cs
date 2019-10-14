@@ -1,4 +1,4 @@
-﻿using AdPortalApi.Models;
+﻿﻿using AdPortalApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdPortalApi.Data

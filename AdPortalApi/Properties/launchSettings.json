@@ -4,14 +4,15 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:50298",
-      "sslPort": 44359
+      "applicationUrl": "http://localhost:18368",
+      "sslPort": 44326
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "api/ads",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -19,6 +20,7 @@
     "AdPortalApi": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "api/ads",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
