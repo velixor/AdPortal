@@ -1,12 +1,15 @@
 ﻿using AdPortalApi.Configurations;
-using AdPortalApi.Exstensions;
+using AdPortalApi.Extensions;
+using AdPortalApi.Filters;
 using AdPortalApi.Services;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 
 namespace AdPortalApi
@@ -22,7 +25,8 @@ namespace AdPortalApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddNpgsql(Configuration);
 
@@ -31,6 +35,7 @@ namespace AdPortalApi
             services.AddAutoMapper(typeof(Startup));
 
             services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
+            services.AddSwagger();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,6 +50,9 @@ namespace AdPortalApi
             app.UseRouting();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
         }
     }
 }
