@@ -1,16 +1,15 @@
 ﻿﻿using AdPortalApi.Models;
 using AutoMapper;
- using Dto.Contracts.AdContracts;
  using Dto.Contracts.UserContracts;
 
  namespace AdPortalApi.Mapping
 {
-    public class RequestToDomainProfile : Profile
+    public class UserProfile : Profile
     {
-        public RequestToDomainProfile()
+        public UserProfile()
         {
             CreateMap<UserRequest, User>();
-            CreateMap<AdRequest, Ad>();
+            CreateMap<User, UserResponse>();
         }
     }
 }
