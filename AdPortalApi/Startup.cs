@@ -32,10 +32,11 @@ namespace AdPortalApi
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAdService, AdService>();
+          
             services.AddAutoMapper(typeof(Startup));
-
-            services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
             services.AddSwagger();
+            
+            services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
