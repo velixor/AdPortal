@@ -1,5 +1,5 @@
-﻿﻿using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AdPortalApi.Configurations;
 using AdPortalApi.Data;
@@ -22,15 +22,15 @@ namespace AdPortalApi.Services
             _userConfigs = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
         }
 
-        public async Task<IEnumerable<Ad>> GetAllAdsAsync()
+        public IQueryable<Ad> GetAllAds()
         {
-            return await _context.Ads.Include(ad=>ad.User).AsNoTracking().ToListAsync();
+            return _context.Ads.Include(ad => ad.User).AsNoTracking();
         }
 
         public async Task<Ad> GetAdByIdAsync(Guid id)
         {
             return await _context.Ads
-                .Include(ad=>ad.User)
+                .Include(ad => ad.User)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -57,7 +57,7 @@ namespace AdPortalApi.Services
             if (!await IsAdExistAsync(ad.Id))
                 return false;
 
-            
+
             return await TrySaveChangesAsync();
         }
 
