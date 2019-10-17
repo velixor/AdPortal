@@ -29,7 +29,9 @@ namespace AdPortalApi.Services
 
         public async Task<Ad> GetAdByIdAsync(Guid id)
         {
-            return await _context.Ads.Include(ad=>ad.User).FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Ads
+                .Include(ad=>ad.User)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<Ad> PostNewAdAsync(Ad ad)
