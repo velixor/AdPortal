@@ -1,4 +1,4 @@
-﻿﻿using AdPortalApi.Models;
+﻿using AdPortalApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdPortalApi.Data
@@ -7,7 +7,8 @@ namespace AdPortalApi.Data
     {
         public AdPortalContext(DbContextOptions<AdPortalContext> options)
             : base(options)
-        {}
+        {
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Ad> Ads { get; set; }
