@@ -1,13 +1,17 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
 using AdPortalApi.Services;
 using AutoMapper;
- using Dto.Contracts.UserContracts;
+using Dto.Contracts;
+using Dto.Contracts.UserContracts;
+using Sieve.Models;
+using Sieve.Services;
 
- namespace AdPortalApi.Controllers
+namespace AdPortalApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,18 +19,29 @@ using AutoMapper;
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly ISieveProcessor _sieveProcessor;
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService userService, IMapper mapper, ISieveProcessor sieveProcessor)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _sieveProcessor = sieveProcessor ?? throw new ArgumentNullException(nameof(sieveProcessor));
         }
 
         [HttpGet]
-        public async Task<List<UserResponse>> Get()
+        public PagingResponse<UserResponse> Get([FromQuery] SieveModel sieveModel)
         {
-            var users = await _userService.GetAllUsersAsync();
-            return _mapper.Map<List<UserResponse>>(users);
+            var users = _userService.GetAllUsers();
+            users = _sieveProcessor.Apply(sieveModel, users, applyPagination: false);
+            var count = users.Count();
+            users = _sieveProcessor.Apply(sieveModel, users, applyFiltering: false, applySorting: false);
+
+            var response = new PagingResponse<UserResponse>
+            {
+                Items = _mapper.Map<List<UserResponse>>(users),
+                Count = count
+            };
+            return response;
         }
 
         [HttpGet("{id}")]

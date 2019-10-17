@@ -1,6 +1,7 @@
 ﻿using AdPortalApi.Configurations;
 using AdPortalApi.Extensions;
 using AdPortalApi.Filters;
+using AdPortalApi.Mapping;
 using AdPortalApi.Services;
 using AutoMapper;
 using FluentValidation.AspNetCore;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Sieve.Models;
+using Sieve.Services;
 
 
 namespace AdPortalApi
@@ -32,19 +35,19 @@ namespace AdPortalApi
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAdService, AdService>();
-          
+
+            services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
+            services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddSwagger();
-            
+
             services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
 

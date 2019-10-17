@@ -1,5 +1,6 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AdPortalApi.Data;
 using AdPortalApi.Models;
@@ -16,9 +17,9 @@ namespace AdPortalApi.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public IQueryable<User> GetAllUsers()
         {
-            return await _context.Users.AsNoTracking().ToListAsync();
+            return _context.Users.Include(user => user.Ads).AsNoTracking();
         }
 
         public async Task<User> GetUserByIdAsync(Guid id)

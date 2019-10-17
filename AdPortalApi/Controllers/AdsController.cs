@@ -1,13 +1,19 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdPortalApi.Models;
 using AdPortalApi.Services;
 using AutoMapper;
- using Dto.Contracts.AdContracts;
+using Dto.Contracts;
+using Dto.Contracts.AdContracts;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Sieve.Models;
+using Sieve.Services;
 
- namespace AdPortalApi.Controllers
+namespace AdPortalApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,22 +21,33 @@ using AutoMapper;
     {
         private readonly IAdService _adService;
         private readonly IMapper _mapper;
+        private readonly ISieveProcessor _sieveProcessor;
 
-        public AdsController(IAdService adService, IMapper mapper)
+        public AdsController(IAdService adService, IMapper mapper, ISieveProcessor sieveProcessor)
         {
             _adService = adService ?? throw new ArgumentNullException(nameof(adService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _sieveProcessor = sieveProcessor ?? throw new ArgumentNullException(nameof(sieveProcessor));
         }
 
         [HttpGet]
-        public async Task<List<AdResponse>> Get()
+        public PagingResponse<AdResponse> Get([FromQuery] SieveModel sieveModel)
         {
-            var ads = await _adService.GetAllAdsAsync();
-            return _mapper.Map<List<AdResponse>>(ads);
+            var ads = _adService.GetAllAds();
+            ads = _sieveProcessor.Apply(sieveModel, ads, applyPagination: false);
+            var count = ads.Count();
+            ads = _sieveProcessor.Apply(sieveModel, ads, applyFiltering: false, applySorting: false);
+
+            var response = new PagingResponse<AdResponse>
+            {
+                Items = _mapper.Map<List<AdResponse>>(ads),
+                Count = count
+            };
+            return response;
         }
 
         [HttpGet("{id}")]
-        public async Task<AdResponse> Get([FromRoute]Guid id)
+        public async Task<AdResponse> Get([FromRoute] Guid id)
         {
             var ad = await _adService.GetAdByIdAsync(id);
             return _mapper.Map<AdResponse>(ad);
@@ -57,7 +74,7 @@ using AutoMapper;
 
             return NoContent();
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
