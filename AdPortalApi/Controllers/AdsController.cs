@@ -8,8 +8,6 @@ using AdPortalApi.Services;
 using AutoMapper;
 using Dto.Contracts;
 using Dto.Contracts.AdContracts;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Sieve.Models;
 using Sieve.Services;
 
@@ -22,12 +20,14 @@ namespace AdPortalApi.Controllers
         private readonly IAdService _adService;
         private readonly IMapper _mapper;
         private readonly ISieveProcessor _sieveProcessor;
+        private readonly IImageService _imageService;
 
-        public AdsController(IAdService adService, IMapper mapper, ISieveProcessor sieveProcessor)
+        public AdsController(IAdService adService, IMapper mapper, ISieveProcessor sieveProcessor, IImageService imageService)
         {
             _adService = adService ?? throw new ArgumentNullException(nameof(adService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _sieveProcessor = sieveProcessor ?? throw new ArgumentNullException(nameof(sieveProcessor));
+            _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         }
 
         [HttpGet]
@@ -54,9 +54,11 @@ namespace AdPortalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<AdResponse> Post(AdRequest ad)
+        public async Task<AdResponse> Post([FromForm]AdRequest ad)
         {
-            var newAd = await _adService.PostNewAdAsync(_mapper.Map<Ad>(ad));
+            var mappedAd = _mapper.Map<Ad>(ad);
+            mappedAd.ImageName = _imageService.UploadImage(ad.Image);
+            var newAd = await _adService.PostNewAdAsync(mappedAd);
             return _mapper.Map<AdResponse>(newAd);
         }
 
@@ -65,7 +67,8 @@ namespace AdPortalApi.Controllers
         {
             var newAdd = await _adService.GetAdByIdAsync(id);
             newAdd.Content = ad.Content;
-            newAdd.ImagePath = ad.ImagePath;
+            // TODO update problems
+//            newAdd.ImagePath = ad.Image;
 
             var modified = await _adService.UpdateAdAsync(newAdd);
 
