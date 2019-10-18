@@ -19,7 +19,7 @@ namespace AdPortalApi.Services
 
         public string UploadImage(IFormFile image)
         {
-            if (!(image?.Length > 0)) return string.Empty;
+            if (!(image?.Length > 0)) return null;
             var imageType = image.ContentType.Split('/')[1];
             var imageName = $"{Guid.NewGuid().ToString()}.{imageType}";
             var path = GetRelPath(imageName);

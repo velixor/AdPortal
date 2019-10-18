@@ -22,7 +22,8 @@ namespace AdPortalApi.Controllers
         private readonly ISieveProcessor _sieveProcessor;
         private readonly IImageService _imageService;
 
-        public AdsController(IAdService adService, IMapper mapper, ISieveProcessor sieveProcessor, IImageService imageService)
+        public AdsController(IAdService adService, IMapper mapper, ISieveProcessor sieveProcessor,
+            IImageService imageService)
         {
             _adService = adService ?? throw new ArgumentNullException(nameof(adService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -54,7 +55,7 @@ namespace AdPortalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<AdResponse> Post([FromForm]AdRequest ad)
+        public async Task<AdResponse> Post([FromForm] AdRequest ad)
         {
             var mappedAd = _mapper.Map<Ad>(ad);
             mappedAd.ImageName = _imageService.UploadImage(ad.Image);
@@ -63,12 +64,12 @@ namespace AdPortalApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, AdRequest ad)
+        public async Task<ActionResult> Put(Guid id, [FromForm] AdRequest ad)
         {
             var newAdd = await _adService.GetAdByIdAsync(id);
+            
             newAdd.Content = ad.Content;
-            // TODO update problems
-//            newAdd.ImagePath = ad.Image;
+            newAdd.ImageName = _imageService.UploadImage(ad.Image);
 
             var modified = await _adService.UpdateAdAsync(newAdd);
 

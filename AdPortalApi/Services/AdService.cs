@@ -57,6 +57,10 @@ namespace AdPortalApi.Services
             if (!await IsAdExistAsync(ad.Id))
                 return false;
 
+            var dbAd = await GetAdByIdAsync(ad.Id);
+            if (ad.Content != null)
+                dbAd.Content = ad.Content;
+            dbAd.ImageName = ad.ImageName;
 
             return await TrySaveChangesAsync();
         }
