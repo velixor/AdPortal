@@ -39,6 +39,8 @@ namespace AdPortalApi
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
 
+            services.AddSingleton<IImageService, ImageService>();
+            
             services.AddAutoMapper(typeof(Startup));
             services.AddSwagger();
 

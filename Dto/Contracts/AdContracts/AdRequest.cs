@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Dto.Contracts.AdContracts
 {
@@ -6,6 +7,6 @@ namespace Dto.Contracts.AdContracts
     {
         public Guid UserId { get; set; }
         public string Content { get; set; }
-        public string ImagePath { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

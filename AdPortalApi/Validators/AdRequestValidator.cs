@@ -9,6 +9,14 @@ namespace AdPortalApi.Validators
         {
             RuleFor(ad => ad.Content).NotEmpty();
             RuleFor(ad => ad.UserId).NotNull();
+            RuleFor(ad => ad.Image)
+                .Must(x =>
+                {
+                    if (x == null)
+                        return true;
+                    var t = x.ContentType.Split('/');
+                    return t.Length == 2 && t[0] == "image";
+                });
         }
     }
 }
