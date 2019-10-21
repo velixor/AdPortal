@@ -33,10 +33,9 @@ namespace AdPortalApi
 
             services.AddNpgsql(Configuration);
 
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAdService, AdService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAdService, AdService>();
 
-            services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
 
             services.AddSingleton<IImageService, ImageService>();
@@ -44,7 +43,9 @@ namespace AdPortalApi
             services.AddAutoMapper(typeof(Startup));
             services.AddSwagger();
 
+            services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
+            services.Configure<ImageConfigs>(Configuration.GetSection(nameof(ImageConfigs)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,6 +60,8 @@ namespace AdPortalApi
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
+
+            app.UseStaticFiles();
         }
     }
 }

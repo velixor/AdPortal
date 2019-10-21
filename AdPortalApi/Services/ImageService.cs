@@ -1,21 +1,23 @@
 ﻿using System;
 using System.IO;
+using AdPortalApi.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace AdPortalApi.Services
 {
     public class ImageService : IImageService
     {
-        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IOptions<ImageConfigs> _imageConfigs;
 
-        public ImageService(IHostEnvironment hostEnvironment)
+        public ImageService(IOptions<ImageConfigs> imageConfigs)
         {
-            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
+            _imageConfigs = imageConfigs ?? throw new ArgumentNullException(nameof(imageConfigs));
         }
 
         private string GetRelPath(string imageName)
-            => Path.Combine("wwwroot", "Images", imageName);
+            => Path.Combine(_imageConfigs.Value.Path, imageName);
 
         public string UploadImage(IFormFile image)
         {
@@ -27,21 +29,7 @@ namespace AdPortalApi.Services
             {
                 image.CopyTo(stream);
             }
-
             return imageName;
         }
-
-        public Image GetImage(string imageName)
-        {
-            var contentType = $"image/{imageName.Split('.')[1]}";
-            var bytes = File.ReadAllBytes(GetRelPath(imageName));
-            return new Image{Bytes = bytes, ContentType = contentType};
-        }
-    }
-
-    public class Image
-    {
-        public byte[] Bytes { get; set; }
-        public string ContentType { get; set; }
     }
 }
