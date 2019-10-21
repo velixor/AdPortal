@@ -6,13 +6,9 @@ using AdPortalApi.Models;
 
 namespace AdPortalApi.Services
 {
-    public interface IUserService
+    public interface IUserService : IEntityBaseService<User>
     {
-        IQueryable<User> GetAllUsers();
-        Task<User> GetUserByIdAsync(Guid id);
         Task<User> RegisterNewUserAsync(User user);
         Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserByIdAsync(Guid id);
-        Task<bool> IsUserExistAsync(Guid id);
     }
 }

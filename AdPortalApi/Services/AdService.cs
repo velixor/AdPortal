@@ -9,43 +9,36 @@ using Microsoft.Extensions.Options;
 
 namespace AdPortalApi.Services
 {
-    public class AdService : IAdService
+    public class AdService : EntityBaseService<Ad>, IAdService
     {
-        private readonly AdPortalContext _context;
         private readonly IUserService _userService;
         private readonly IOptions<UserConfigs> _userConfigs;
 
-        public AdService(AdPortalContext context, IUserService userService, IOptions<UserConfigs> userConfigs)
+        public AdService(AdPortalContext context, IUserService userService, IOptions<UserConfigs> userConfigs) : base(context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _userConfigs = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
         }
 
-        public IQueryable<Ad> GetAllAds()
+        public override async Task<Ad> GetByIdAsync(Guid id)
         {
-            return _context.Ads.Include(ad => ad.User).AsNoTracking();
-        }
-
-        public async Task<Ad> GetAdByIdAsync(Guid id)
-        {
-            return await _context.Ads
+            return await Context.Ads
                 .Include(ad => ad.User)
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .SingleAsync(u => u.Id == id);
         }
 
         public async Task<Ad> PostNewAdAsync(Ad ad)
         {
-            if (!await _userService.IsUserExistAsync(ad.UserId))
+            if (!await _userService.IsEntryExistAsync(ad.UserId))
                 return null;
 
-            var adCountOfUser = await _context.Ads.AsNoTracking().CountAsync(x => x.UserId == ad.UserId);
+            var adCountOfUser = await Context.Ads.AsNoTracking().CountAsync(x => x.UserId == ad.UserId);
             if (adCountOfUser >= _userConfigs.Value.AdCountLimit)
-                return null;
+                return null;    // TODO make more clearer
 
             ad.CreationDate = DateTime.Now;
 
-            var created = _context.Ads.Add(ad);
+            var created = Context.Ads.Add(ad);
             if (!await TrySaveChangesAsync())
                 return null;
             return created.Entity;
@@ -54,10 +47,10 @@ namespace AdPortalApi.Services
         // TODO Improve update logic
         public async Task<bool> UpdateAdAsync(Ad ad)
         {
-            if (!await IsAdExistAsync(ad.Id))
+            if (!await IsEntryExistAsync(ad.Id))
                 return false;
 
-            var dbAd = await GetAdByIdAsync(ad.Id);
+            var dbAd = await GetByIdAsync(ad.Id);
             if (ad.Content != null)
                 dbAd.Content = ad.Content;
             dbAd.ImageName = ad.ImageName;
@@ -65,26 +58,11 @@ namespace AdPortalApi.Services
             return await TrySaveChangesAsync();
         }
 
-        public async Task<bool> DeleteAdByIdAsync(Guid id)
-        {
-            if (!await IsAdExistAsync(id))
-                return false;
-
-            _context.Ads.Remove(await GetAdByIdAsync(id));
-
-            return await TrySaveChangesAsync();
-        }
-
-        public async Task<bool> IsAdExistAsync(Guid id)
-        {
-            return await _context.Ads.AsNoTracking().AnyAsync(ad => ad.Id == id);
-        }
-
         private async Task<bool> TrySaveChangesAsync()
         {
             try
             {
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {

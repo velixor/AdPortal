@@ -34,7 +34,7 @@ namespace AdPortalApi.Controllers
         [HttpGet]
         public PagingResponse<AdResponse> Get([FromQuery] SieveModel sieveModel)
         {
-            var ads = _adService.GetAllAds();
+            var ads = _adService.GetAll();
             ads = _sieveProcessor.Apply(sieveModel, ads, applyPagination: false);
             var count = ads.Count();
             ads = _sieveProcessor.Apply(sieveModel, ads, applyFiltering: false, applySorting: false);
@@ -50,7 +50,7 @@ namespace AdPortalApi.Controllers
         [HttpGet("{id}")]
         public async Task<AdResponse> Get([FromRoute] Guid id)
         {
-            var ad = await _adService.GetAdByIdAsync(id);
+            var ad = await _adService.GetByIdAsync(id);
             return _mapper.Map<AdResponse>(ad);
         }
 
@@ -66,8 +66,8 @@ namespace AdPortalApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(Guid id, [FromForm] AdRequest ad)
         {
-            var newAdd = await _adService.GetAdByIdAsync(id);
-            
+            var newAdd = await _adService.GetByIdAsync(id);
+
             newAdd.Content = ad.Content;
             newAdd.ImageName = _imageService.UploadImage(ad.Image);
 
@@ -82,9 +82,7 @@ namespace AdPortalApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            if (!await _adService.DeleteAdByIdAsync(id))
-                return NotFound();
-
+            await _adService.DeleteByIdAsync(id);
             return NoContent();
         }
     }

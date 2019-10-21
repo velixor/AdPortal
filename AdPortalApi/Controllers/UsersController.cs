@@ -31,7 +31,7 @@ namespace AdPortalApi.Controllers
         [HttpGet]
         public PagingResponse<UserResponse> Get([FromQuery] SieveModel sieveModel)
         {
-            var users = _userService.GetAllUsers();
+            var users = _userService.GetAll();
             users = _sieveProcessor.Apply(sieveModel, users, applyPagination: false);
             var count = users.Count();
             users = _sieveProcessor.Apply(sieveModel, users, applyFiltering: false, applySorting: false);
@@ -47,7 +47,7 @@ namespace AdPortalApi.Controllers
         [HttpGet("{id}")]
         public async Task<UserResponse> Get([FromRoute] Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetByIdAsync(id);
             return _mapper.Map<UserResponse>(user);
         }
 
@@ -75,9 +75,7 @@ namespace AdPortalApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
-            if (!await _userService.DeleteUserByIdAsync(id))
-                return NotFound();
-
+            await _userService.DeleteByIdAsync(id);
             return NoContent();
         }
     }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdPortalApi.Models
 {
-    public class Ad
+    public class Ad : IEntity
     {
         public Guid Id { get; set; }
         [Required] public int Number { get; set; }
