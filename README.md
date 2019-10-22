@@ -5,10 +5,10 @@ An example sort/filter/page query:
 ```curl
 api/ads
 
-?sorts=     userId,-creationDate                      // sort by user, then descendingly by creation date 
-&filters=   rating>10, Content@=продам,               // filter to ads with more than 10 rating, and a content that contains the phrase "продам"
-&page=      1                                         // get the first page...
-&pageSize=  10                                        // ...which contains 10 ads
+?sorts=     userId,-creationDate        // sort by user, then descendingly by creation date 
+&filters=   rating>10, Content@=продам  // filter to ads with more than 10 rating, and a content that contains the phrase "продам"
+&page=      1                           // get the first page...
+&pageSize=  10                          // ...which contains 10 ads
 
 ```
 More formally:
