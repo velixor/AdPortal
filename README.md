@@ -1,10 +1,11 @@
 # Административный интерфейс для сущности “Объявление”.
-- Документирование API : **`swagger`**
+- Документирование API: **`swagger`**
 - **`ASP.NET CORE`**
 - база данных: **`PostgreSQL`**
 - ОРМ: **`EF`**.
-- валидация **`FluentValidation`**
-- мапинг **`AutoMaper`**
+- валидация: **`FluentValidation`**
+- мапинг: **`AutoMaper`**
+- фильтрация/сортировка/пагинация: [**`Sieve`**](https://github.com/velixor/AdPortal#sieve) 
 
 # Сущности
 
