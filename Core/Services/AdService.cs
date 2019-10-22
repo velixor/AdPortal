@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Configurations;
+using Core.Helpers;
 using Data;
 using Data.Models;
 using Dto.Contracts.AdContracts;
@@ -17,13 +18,13 @@ namespace Core.Services
     public class AdService : EntityBaseService<Ad, AdRequest, AdResponse>, IAdService
     {
         private readonly IUserService _userService;
-        private readonly IOptions<UserConfigs> _userConfigs;
+        private readonly IOptions<UserOptions> _userConfigs;
         private readonly IImageHelper _imageHelper;
-        private readonly IOptions<ImageConfigs> _imageConfigs;
+        private readonly IOptions<ImageOptions> _imageConfigs;
 
         public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
-            IUserService userService, IOptions<UserConfigs> userConfigs, IImageHelper imageHelper,
-            IOptions<ImageConfigs> imageConfigs)
+            IUserService userService, IOptions<UserOptions> userConfigs, IImageHelper imageHelper,
+            IOptions<ImageOptions> imageConfigs)
             : base(context, mapper, sieveProcessor)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));

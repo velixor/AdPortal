@@ -3,11 +3,11 @@ using Microsoft.Extensions.Options;
 using Sieve.Models;
 using Sieve.Services;
 
-namespace Core
+namespace Core.Mapping
 {
-    public class ApplicationSieveProcessor : SieveProcessor
+    public class MappingSieveProcessor : SieveProcessor
     {
-        public ApplicationSieveProcessor(IOptions<SieveOptions> options)
+        public MappingSieveProcessor(IOptions<SieveOptions> options)
             : base(options)
         {
         }

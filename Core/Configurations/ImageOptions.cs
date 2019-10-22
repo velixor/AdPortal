@@ -1,6 +1,6 @@
 ﻿namespace Core.Configurations
 {
-    public class ImageConfigs
+    public class ImageOptions
     {
         public string Path { get; set; }
     }

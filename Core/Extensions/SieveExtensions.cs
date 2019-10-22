@@ -3,7 +3,7 @@ using Data.Models;
 using Sieve.Models;
 using Sieve.Services;
 
-namespace Core
+namespace Core.Extensions
 {
     public static class SieveExtensions
     {

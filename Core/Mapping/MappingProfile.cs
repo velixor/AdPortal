@@ -3,7 +3,7 @@ using Data.Models;
 using Dto.Contracts.AdContracts;
 using Dto.Contracts.UserContracts;
 
-namespace Core
+namespace Core.Mapping
 {
     public class MappingProfile : Profile
     {

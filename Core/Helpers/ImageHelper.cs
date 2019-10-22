@@ -4,13 +4,13 @@ using Core.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Core
+namespace Core.Helpers
 {
     public class ImageHelper : IImageHelper
     {
-        private readonly IOptions<ImageConfigs> _imageConfigs;
+        private readonly IOptions<ImageOptions> _imageConfigs;
 
-        public ImageHelper(IOptions<ImageConfigs> imageConfigs)
+        public ImageHelper(IOptions<ImageOptions> imageConfigs)
         {
             _imageConfigs = imageConfigs ?? throw new ArgumentNullException(nameof(imageConfigs));
         }

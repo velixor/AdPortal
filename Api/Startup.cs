@@ -1,8 +1,13 @@
-﻿using Api.Extensions;
+﻿using System;
+using System.Linq;
+using System.Reflection.Metadata;
+using Api.Extensions;
 using Api.Filters;
 using AutoMapper;
 using Core;
 using Core.Configurations;
+using Core.Helpers;
+using Core.Mapping;
 using Core.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -28,24 +33,23 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var coreAssembly = typeof(MappingProfile).Assembly;
+            
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(coreAssembly));
 
+            services.AddAutoMapper(coreAssembly);
             services.AddNpgsql(Configuration);
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"}); });
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAdService, AdService>();
-
-            services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
-
+            services.AddScoped<ISieveProcessor, MappingSieveProcessor>();
             services.AddSingleton<IImageHelper, ImageHelper>();
 
-            services.AddAutoMapper(typeof(Startup));
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"}); });
-
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
-            services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));
-            services.Configure<ImageConfigs>(Configuration.GetSection(nameof(ImageConfigs)));
+            services.Configure<UserOptions>(Configuration.GetSection(nameof(UserOptions)));
+            services.Configure<ImageOptions>(Configuration.GetSection(nameof(ImageOptions)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
