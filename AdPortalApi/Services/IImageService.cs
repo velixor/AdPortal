@@ -5,6 +5,6 @@ namespace AdPortalApi.Services
 {
     public interface IImageService
     {
-        string UploadImage(IFormFile image);
+        string UploadImageAndGetName(IFormFile image);
     }
 }

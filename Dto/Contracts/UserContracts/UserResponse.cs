@@ -6,6 +6,6 @@ namespace Dto.Contracts.UserContracts
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string AdsCount { get; set; }
+        public int AdsCount { get; set; }
     }
 }

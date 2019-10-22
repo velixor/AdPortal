@@ -19,7 +19,7 @@ namespace AdPortalApi.Services
         private string GetRelPath(string imageName)
             => Path.Combine(_imageConfigs.Value.Path, imageName);
 
-        public string UploadImage(IFormFile image)
+        public string UploadImageAndGetName(IFormFile image)
         {
             if (!(image?.Length > 0)) return null;
             var imageType = image.ContentType.Split('/')[1];

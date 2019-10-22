@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-using AdPortalApi.Models;
-using AdPortalApi.Services;
+﻿using AdPortalApi.Models;
 using AutoMapper;
 using Dto.Contracts.AdContracts;
-using Microsoft.AspNetCore.Http;
 
 namespace AdPortalApi.Mapping
 {

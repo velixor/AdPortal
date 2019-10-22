@@ -28,7 +28,7 @@ namespace AdPortalApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+            services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddNpgsql(Configuration);
@@ -39,9 +39,9 @@ namespace AdPortalApi
             services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
 
             services.AddSingleton<IImageService, ImageService>();
-            
+
             services.AddAutoMapper(typeof(Startup));
-            services.AddSwagger();
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"}); });
 
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.Configure<UserConfigs>(Configuration.GetSection(nameof(UserConfigs)));

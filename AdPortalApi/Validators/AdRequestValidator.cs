@@ -1,4 +1,5 @@
-﻿using Dto.Contracts.AdContracts;
+﻿using System;
+using Dto.Contracts.AdContracts;
 using FluentValidation;
 
 namespace AdPortalApi.Validators
@@ -8,7 +9,7 @@ namespace AdPortalApi.Validators
         public AdRequestValidator()
         {
             RuleFor(ad => ad.Content).NotEmpty();
-            RuleFor(ad => ad.UserId).NotNull();
+            RuleFor(ad => ad.UserId).Must(x => x != Guid.Empty);
             RuleFor(ad => ad.Image)
                 .Must(x =>
                 {
