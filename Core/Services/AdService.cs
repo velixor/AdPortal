@@ -51,6 +51,21 @@ namespace Core.Services
             return Mapper.Map<AdResponse>(newAd);
         }
 
+        public override async Task<AdResponse> UpdateAsync(Guid id, AdRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            var ad = await Entities().SingleAsync(x => x.Id == id);
+
+            DeleteImage(ad.ImageName);
+            ad = Mapper.Map(request, ad);
+            ad.ImageName = _imageHelper.UploadImageAndGetName(request.Image);
+            
+            await Context.SaveChangesAsync();
+
+            return Mapper.Map<AdResponse>(ad);
+        }
+
         public override async Task DeleteByIdAsync(Guid id)
         {
             var ad = await Context.Ads.SingleAsync(x => x.Id == id);
