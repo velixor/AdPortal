@@ -1,6 +1,6 @@
-# Sieve
-## Send a request
+# [Sieve](https://github.com/Biarity/Sieve)
 
+## Send a request
 An example sort/filter/page query:
 ```curl
 api/ads
