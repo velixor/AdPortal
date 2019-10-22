@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Core.Configurations;
+using Core.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
