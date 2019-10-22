@@ -23,7 +23,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<TResponse> Get([FromRoute] Guid id)
+        public virtual async Task<TResponse> Get([FromRoute] Guid id)
         {
             var entry = await _entityService.GetByIdAsync(id);
             return entry;
@@ -31,27 +31,27 @@ namespace Api.Controllers
 
         // Get with filtering, sorting and paginating
         [HttpGet]
-        public PagingResponse<TResponse> Get([FromQuery] SieveModel sieveModel)
+        public virtual PagingResponse<TResponse> Get([FromQuery] SieveModel sieveModel)
         {
             return _entityService.Get(sieveModel);
         }
 
         [HttpPost]
-        public async Task<TResponse> Post([FromForm] TRequest request)
+        public virtual async Task<TResponse> Post([FromForm] TRequest request)
         {
             var newEntry = await _entityService.CreateNewAsync(request);
             return newEntry;
         }
 
         [HttpPut("{id}")]
-        public async Task<TResponse> Put(Guid id, [FromForm] TRequest request)
+        public virtual async Task<TResponse> Put(Guid id, [FromForm] TRequest request)
         {
             var updatedEntry = await _entityService.UpdateAsync(id, request);
             return updatedEntry;
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public virtual async Task<ActionResult> Delete(Guid id)
         {
             await _entityService.DeleteByIdAsync(id);
             return NoContent();
