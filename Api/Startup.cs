@@ -1,17 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Reflection.Metadata;
-using Api.Extensions;
-using Api.Filters;
+﻿using Api.Filters;
 using AutoMapper;
-using Core;
 using Core.Helpers;
 using Core.Mapping;
 using Core.Options;
 using Core.Services;
+using Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,9 +35,13 @@ namespace Api
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(coreAssembly));
 
-            services.AddAutoMapper(coreAssembly);
-            services.AddNpgsql(Configuration);
+            services.AddAutoMapper(coreAssembly);          
+            
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"}); });
+
+            var connectionString = Configuration.GetConnectionString("LocalPgSql");
+            services.AddDbContext<AdPortalContext>(options =>
+                options.UseNpgsql(connectionString));
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAdService, AdService>();
