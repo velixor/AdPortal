@@ -30,7 +30,7 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var coreAssembly = typeof(MappingProfile).Assembly;
+            var coreAssembly = typeof(MappingAutoMapperProfile).Assembly;
             
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(coreAssembly));

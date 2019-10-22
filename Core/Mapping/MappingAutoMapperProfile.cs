@@ -5,9 +5,9 @@ using Dto.Contracts.UserContracts;
 
 namespace Core.Mapping
 {
-    public class MappingProfile : Profile
+    public class MappingAutoMapperProfile : Profile
     {
-        public MappingProfile()
+        public MappingAutoMapperProfile()
         {
             CreateMap<Ad, AdResponse>();
             CreateMap<AdRequest, Ad>();
