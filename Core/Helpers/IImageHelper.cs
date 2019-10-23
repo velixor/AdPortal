@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Helpers
 {
     public interface IImageHelper
     {
-        string UploadImageAndGetName(IFormFile image);
+        Task<string> UploadImageAndGetName(IFormFile image);
     }
 }

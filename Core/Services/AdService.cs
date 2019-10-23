@@ -43,7 +43,7 @@ namespace Core.Services
 
             var newAd = Mapper.Map<Ad>(ad);
             newAd.CreationDate = DateTime.Now;
-            newAd.ImageName = _imageHelper.UploadImageAndGetName(ad.Image);
+            newAd.ImageName = await _imageHelper.UploadImageAndGetName(ad.Image);
 
             Context.Ads.Add(newAd);
             await Context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace Core.Services
 
             DeleteImage(ad.ImageName);
             ad = Mapper.Map(request, ad);
-            ad.ImageName = _imageHelper.UploadImageAndGetName(request.Image);
+            ad.ImageName = await _imageHelper.UploadImageAndGetName(request.Image);
             
             await Context.SaveChangesAsync();
 
