@@ -17,17 +17,14 @@ namespace Core.Services
 {
     public class AdService : EntityBaseService<Ad, AdRequest, AdResponse>, IAdService
     {
-        private readonly IUserService _userService;
         private readonly IOptions<UserOptions> _userConfigs;
         private readonly IImageHelper _imageHelper;
-        private readonly IOptions<ImageOptions> _imageConfigs;
+        private readonly IOptions<StaticFilesOptions> _imageConfigs;
 
         public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
-            IUserService userService, IOptions<UserOptions> userConfigs, IImageHelper imageHelper,
-            IOptions<ImageOptions> imageConfigs)
+            IOptions<UserOptions> userConfigs, IImageHelper imageHelper, IOptions<StaticFilesOptions> imageConfigs)
             : base(context, mapper, sieveProcessor)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _userConfigs = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
             _imageHelper = imageHelper ?? throw new ArgumentNullException(nameof(imageHelper));
             _imageConfigs = imageConfigs ?? throw new ArgumentNullException(nameof(imageConfigs));
@@ -37,17 +34,22 @@ namespace Core.Services
         {
             if (ad == null) throw new ArgumentNullException(nameof(ad));
 
-            var user = await _userService.GetByIdAsync(ad.UserId);
+            var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
             if (user.AdsCount >= _userConfigs.Value.AdCountLimit)
                 throw new ConstraintException($"User {user.Id} has reached his ad limit");
 
+            await using var transaction = await Context.Database.BeginTransactionAsync();
+            
             var newAd = Mapper.Map<Ad>(ad);
             newAd.CreationDate = DateTime.Now;
             newAd.ImageName = await _imageHelper.UploadImageAndGetName(ad.Image);
-
+                
             Context.Ads.Add(newAd);
+            user.AdsCount++;
+            
             await Context.SaveChangesAsync();
-
+            await transaction.CommitAsync();
+                
             return Mapper.Map<AdResponse>(newAd);
         }
 
@@ -60,7 +62,7 @@ namespace Core.Services
             DeleteImage(ad.ImageName);
             ad = Mapper.Map(request, ad);
             ad.ImageName = await _imageHelper.UploadImageAndGetName(request.Image);
-            
+
             await Context.SaveChangesAsync();
 
             return Mapper.Map<AdResponse>(ad);
@@ -69,9 +71,16 @@ namespace Core.Services
         public override async Task DeleteByIdAsync(Guid id)
         {
             var ad = await Context.Ads.SingleAsync(x => x.Id == id);
+
+            await using var transaction = await Context.Database.BeginTransactionAsync();
+            
             DeleteImage(ad.ImageName);
             Context.Ads.Remove(ad);
+            var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
+            user.AdsCount--;
+            
             await Context.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
         protected override IQueryable<Ad> Entities()

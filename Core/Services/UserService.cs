@@ -17,7 +17,7 @@ namespace Core.Services
 
         protected override IQueryable<User> Entities()
         {
-            return Context.Users.Include(u => u.Ads);
+            return Context.Users;
         }
     }
 }

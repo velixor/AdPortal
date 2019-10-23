@@ -13,10 +13,7 @@ namespace Core.Mapping
             CreateMap<AdRequest, Ad>();
 
             CreateMap<UserRequest, User>();
-            CreateMap<User, UserResponse>()
-                .ForMember(response => response.AdsCount,
-                    opt => opt
-                        .MapFrom(user => user.Ads.Count));
+            CreateMap<User, UserResponse>();
         }
     }
 }

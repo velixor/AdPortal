@@ -8,6 +8,7 @@ namespace Data.Models
     {
         public Guid Id { get; set; }
         [Required] public string Name { get; set; }
+        public int AdsCount { get; set; }
 
         public ICollection<Ad> Ads { get; set; }
     }
