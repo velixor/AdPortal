@@ -9,27 +9,39 @@ namespace Core.Helpers
 {
     public class ImageHelper : IImageHelper
     {
-        private readonly IOptions<ImageOptions> _imageConfigs;
+        private readonly IOptions<StaticFilesOptions> _staticFilesOptions;
 
-        public ImageHelper(IOptions<ImageOptions> imageConfigs)
+        public ImageHelper(IOptions<StaticFilesOptions> staticFilesOptions)
         {
-            _imageConfigs = imageConfigs ?? throw new ArgumentNullException(nameof(imageConfigs));
+            _staticFilesOptions = staticFilesOptions ?? throw new ArgumentNullException(nameof(staticFilesOptions));
         }
 
-        private string GetRelPath(string imageName) => Path.Combine(_imageConfigs.Value.Path, imageName);
+        private string GetPathOfImage(string imageName)
+        {
+            return Path.Combine(_staticFilesOptions.Value.StaticFilesPath,
+                _staticFilesOptions.Value.ImagePath,
+                imageName);
+        }
 
         public async Task<string> UploadImageAndGetName(IFormFile image)
         {
             if (!(image?.Length > 0)) return null;
-            
+
             var imageType = image.ContentType.Split('/')[1];
             var imageName = $"{Guid.NewGuid().ToString()}.{imageType}";
-            var path = GetRelPath(imageName);
+            var path = GetPathOfImage(imageName);
 
             await using var stream = new FileStream(path, FileMode.CreateNew);
             await image.CopyToAsync(stream);
-            
+
             return imageName;
+        }
+
+        public void DeleteImage(string imageName)
+        {
+            var image = GetPathOfImage(imageName);
+            if (File.Exists(image))
+                File.Delete(image);
         }
     }
 }

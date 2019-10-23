@@ -1,4 +1,5 @@
-﻿using Api.Filters;
+﻿using System.IO;
+using Api.Filters;
 using AutoMapper;
 using Core.Helpers;
 using Core.Mapping;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Sieve.Models;
@@ -50,7 +52,7 @@ namespace Api
 
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.Configure<UserOptions>(Configuration.GetSection(nameof(UserOptions)));
-            services.Configure<ImageOptions>(Configuration.GetSection(nameof(ImageOptions)));
+            services.Configure<StaticFilesOptions>(Configuration.GetSection(nameof(StaticFilesOptions)));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -66,7 +68,11 @@ namespace Api
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Configuration
+                    .GetSection("StaticFilesOptions:StaticFilesPath").Value)
+            });
         }
     }
 }

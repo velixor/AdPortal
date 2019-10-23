@@ -17,17 +17,15 @@ namespace Core.Services
 {
     public class AdService : EntityBaseService<Ad, AdRequest, AdResponse>, IAdService
     {
-        private readonly IOptions<UserOptions> _userConfigs;
+        private readonly IOptions<UserOptions> _userOptions;
         private readonly IImageHelper _imageHelper;
-        private readonly IOptions<StaticFilesOptions> _imageConfigs;
 
         public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
-            IOptions<UserOptions> userConfigs, IImageHelper imageHelper, IOptions<StaticFilesOptions> imageConfigs)
+            IOptions<UserOptions> userConfigs, IImageHelper imageHelper)
             : base(context, mapper, sieveProcessor)
         {
-            _userConfigs = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
+            _userOptions = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
             _imageHelper = imageHelper ?? throw new ArgumentNullException(nameof(imageHelper));
-            _imageConfigs = imageConfigs ?? throw new ArgumentNullException(nameof(imageConfigs));
         }
 
         public override async Task<AdResponse> CreateNewAsync(AdRequest ad)
@@ -35,7 +33,7 @@ namespace Core.Services
             if (ad == null) throw new ArgumentNullException(nameof(ad));
 
             var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
-            if (user.AdsCount >= _userConfigs.Value.AdCountLimit)
+            if (user.AdsCount >= _userOptions.Value.AdCountLimit)
                 throw new ConstraintException($"User {user.Id} has reached his ad limit");
 
             await using var transaction = await Context.Database.BeginTransactionAsync();
@@ -59,7 +57,7 @@ namespace Core.Services
 
             var ad = await Entities().SingleAsync(x => x.Id == id);
 
-            DeleteImage(ad.ImageName);
+            _imageHelper.DeleteImage(ad.ImageName);
             ad = Mapper.Map(request, ad);
             ad.ImageName = await _imageHelper.UploadImageAndGetName(request.Image);
 
@@ -74,7 +72,7 @@ namespace Core.Services
 
             await using var transaction = await Context.Database.BeginTransactionAsync();
             
-            DeleteImage(ad.ImageName);
+            _imageHelper.DeleteImage(ad.ImageName);
             Context.Ads.Remove(ad);
             var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
             user.AdsCount--;
@@ -86,14 +84,6 @@ namespace Core.Services
         protected override IQueryable<Ad> Entities()
         {
             return Context.Ads.Include(ad => ad.User);
-        }
-
-        // TODO make auto image deleting, because on cascade deleting dont affect to images 
-        private void DeleteImage(string imageName)
-        {
-            var path = Path.Combine(_imageConfigs.Value.Path, imageName);
-            if (File.Exists(path))
-                File.Delete(path);
         }
     }
 }
