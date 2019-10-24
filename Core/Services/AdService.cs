@@ -56,7 +56,7 @@ namespace Core.Services
             
             var newAd = Mapper.Map<Ad>(ad);
             newAd.CreationDate = DateTime.Now;
-            newAd.ImageName = await _imageHelper.UploadImageAndGetName(ad.Image);
+            newAd.ImageName = await _imageHelper.UploadImageAndGetNameAsync(ad.Image);
                 
             Context.Ads.Add(newAd);
             user.AdsCount++;
@@ -71,11 +71,11 @@ namespace Core.Services
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var ad = await Entities().SingleAsync(x => x.Id == id);
+            var ad = await Entries().SingleAsync(x => x.Id == id);
 
             _imageHelper.DeleteImage(ad.ImageName);
             ad = Mapper.Map(request, ad);
-            ad.ImageName = await _imageHelper.UploadImageAndGetName(request.Image);
+            ad.ImageName = await _imageHelper.UploadImageAndGetNameAsync(request.Image);
 
             await Context.SaveChangesAsync();
 
@@ -97,7 +97,7 @@ namespace Core.Services
             await transaction.CommitAsync();
         }
 
-        protected override IQueryable<Ad> Entities()
+        protected override IQueryable<Ad> Entries()
         {
             return Context.Ads.Include(ad => ad.User);
         }

@@ -12,20 +12,14 @@ namespace Core.Helpers
     {
         private readonly IOptions<StaticFilesOptions> _staticFilesOptions;
         private readonly IHttpContextAccessor _contextAccessor;
+
         public ImageHelper(IOptions<StaticFilesOptions> staticFilesOptions, IHttpContextAccessor contextAccessor)
         {
             _staticFilesOptions = staticFilesOptions ?? throw new ArgumentNullException(nameof(staticFilesOptions));
             _contextAccessor = contextAccessor;
         }
-
-        private string GetPathOfImage(string imageName)
-        {
-            return Path.Combine(_staticFilesOptions.Value.StaticFilesPath,
-                _staticFilesOptions.Value.ImagePath,
-                imageName);
-        }
-
-        public async Task<string> UploadImageAndGetName(IFormFile image)
+        
+        public async Task<string> UploadImageAndGetNameAsync(IFormFile image)
         {
             if (!(image?.Length > 0)) return null;
 
@@ -43,9 +37,19 @@ namespace Core.Helpers
         {
             if (ad == null) throw new ArgumentNullException(nameof(ad));
             if (ad.Image == null) return;
-            
+
             ad.Image = GetImageUrl(ad.Image);
         }
+
+        public void DeleteImage(string imageName)
+        {
+            if (imageName == null) return;
+
+            var image = GetPathOfImage(imageName);
+            if (File.Exists(image))
+                File.Delete(image);
+        }
+
         private string GetImageUrl(string imageName)
         {
             var url = $"{_contextAccessor.HttpContext.Request.Scheme}" +
@@ -56,13 +60,11 @@ namespace Core.Helpers
                 $"{imageName}";
         }
 
-        public void DeleteImage(string imageName)
+        private string GetPathOfImage(string imageName)
         {
-            if (imageName == null) return;
-            
-            var image = GetPathOfImage(imageName);
-            if (File.Exists(image))
-                File.Delete(image);
+            return Path.Combine(_staticFilesOptions.Value.StaticFilesPath,
+                _staticFilesOptions.Value.ImagePath,
+                imageName);
         }
     }
 }

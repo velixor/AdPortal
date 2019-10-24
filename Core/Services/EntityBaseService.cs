@@ -31,7 +31,7 @@ namespace Core.Services
 
         public virtual async Task<TResponse> GetByIdAsync(Guid id)
         {
-            var entry = await Entities().AsNoTracking().SingleAsync(x => x.Id == id);
+            var entry = await Entries().AsNoTracking().SingleAsync(x => x.Id == id);
             return Mapper.Map<TResponse>(entry);
         }
 
@@ -39,7 +39,7 @@ namespace Core.Services
         {
             if (sieveModel == null) throw new ArgumentNullException(nameof(sieveModel));
 
-            var entries = Entities().AsNoTracking();
+            var entries = Entries().AsNoTracking();
             var count = SieveProcessor.ApplyAndCount(sieveModel, ref entries);
 
             return new PagingResponse<TResponse>
@@ -64,7 +64,7 @@ namespace Core.Services
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var entry = await Entities().SingleAsync(x => x.Id == id);
+            var entry = await Entries().SingleAsync(x => x.Id == id);
             entry = Mapper.Map(request, entry);
             await Context.SaveChangesAsync();
 
@@ -83,6 +83,6 @@ namespace Core.Services
             return await Context.Set<T>().AsNoTracking().AnyAsync(x => x.Id == id);
         }
 
-        protected abstract IQueryable<T> Entities();
+        protected abstract IQueryable<T> Entries();
     }
 }

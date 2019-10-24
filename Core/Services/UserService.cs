@@ -15,7 +15,7 @@ namespace Core.Services
         {
         }
 
-        protected override IQueryable<User> Entities()
+        protected override IQueryable<User> Entries()
         {
             return Context.Users;
         }
