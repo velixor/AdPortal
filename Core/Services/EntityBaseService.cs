@@ -44,7 +44,7 @@ namespace Core.Services
 
             return new PagingResponse<TResponse>
             {
-                Items = Mapper.Map<List<TResponse>>(entries),
+                Items = Mapper.ProjectTo<TResponse>(entries).ToList(),
                 Count = count
             };
         }
