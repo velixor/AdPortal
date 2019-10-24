@@ -12,6 +12,7 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="9.0.0" />
       <PackageReference Include="FluentValidation" Version="8.5.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.0.0" />
       <PackageReference Include="Sieve" Version="2.3.2" />
     </ItemGroup>

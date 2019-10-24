@@ -9,7 +9,8 @@ namespace Core.Mapping
     {
         public MappingAutoMapperProfile()
         {
-            CreateMap<Ad, AdResponse>();
+            CreateMap<Ad, AdResponse>().ForMember(response => response.Image,
+                opt => opt.MapFrom(ad => ad.ImageName));
             CreateMap<AdRequest, Ad>();
 
             CreateMap<UserRequest, User>();

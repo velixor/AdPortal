@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Api.Filters;
+﻿using Api.Filters;
 using AutoMapper;
 using Core.Helpers;
 using Core.Mapping;
@@ -9,6 +8,7 @@ using Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,8 +48,9 @@ namespace Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAdService, AdService>();
             services.AddScoped<ISieveProcessor, MappingSieveProcessor>();
-            services.AddSingleton<IImageHelper, ImageHelper>();
-
+            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
             services.Configure<UserOptions>(Configuration.GetSection(nameof(UserOptions)));
             services.Configure<StaticFilesOptions>(Configuration.GetSection(nameof(StaticFilesOptions)));

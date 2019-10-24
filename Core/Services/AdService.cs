@@ -8,9 +8,11 @@ using Core.Helpers;
 using Core.Options;
 using Data;
 using Data.Models;
+using Dto.Contracts;
 using Dto.Contracts.AdContracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Sieve.Models;
 using Sieve.Services;
 
 namespace Core.Services
@@ -21,11 +23,25 @@ namespace Core.Services
         private readonly IImageHelper _imageHelper;
 
         public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
-            IOptions<UserOptions> userConfigs, IImageHelper imageHelper)
+            IOptions<UserOptions> userOptions, IImageHelper imageHelper)
             : base(context, mapper, sieveProcessor)
         {
-            _userOptions = userConfigs ?? throw new ArgumentNullException(nameof(userConfigs));
+            _userOptions = userOptions ?? throw new ArgumentNullException(nameof(userOptions));
             _imageHelper = imageHelper ?? throw new ArgumentNullException(nameof(imageHelper));
+        }
+
+        public override async Task<AdResponse> GetByIdAsync(Guid id)
+        {
+            var result = await base.GetByIdAsync(id);
+            _imageHelper.ImageNameToImageUrl(result);
+            return result;
+        }
+
+        public override PagingResponse<AdResponse> Get(SieveModel sieveModel)
+        {
+            var result = base.Get(sieveModel);
+            result.Items.ForEach(_imageHelper.ImageNameToImageUrl);
+            return result;
         }
 
         public override async Task<AdResponse> CreateNewAsync(AdRequest ad)

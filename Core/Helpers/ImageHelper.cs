@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Core.Options;
+using Dto.Contracts.AdContracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -10,10 +11,11 @@ namespace Core.Helpers
     public class ImageHelper : IImageHelper
     {
         private readonly IOptions<StaticFilesOptions> _staticFilesOptions;
-
-        public ImageHelper(IOptions<StaticFilesOptions> staticFilesOptions)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public ImageHelper(IOptions<StaticFilesOptions> staticFilesOptions, IHttpContextAccessor contextAccessor)
         {
             _staticFilesOptions = staticFilesOptions ?? throw new ArgumentNullException(nameof(staticFilesOptions));
+            _contextAccessor = contextAccessor;
         }
 
         private string GetPathOfImage(string imageName)
@@ -37,8 +39,27 @@ namespace Core.Helpers
             return imageName;
         }
 
+        public void ImageNameToImageUrl(AdResponse ad)
+        {
+            if (ad == null) throw new ArgumentNullException(nameof(ad));
+            if (ad.Image == null) return;
+            
+            ad.Image = GetImageUrl(ad.Image);
+        }
+        private string GetImageUrl(string imageName)
+        {
+            var url = $"{_contextAccessor.HttpContext.Request.Scheme}" +
+                      $"://{_contextAccessor.HttpContext.Request.Host.ToUriComponent()}";
+            return
+                $"{url}" +
+                $"/{_staticFilesOptions.Value.ImagePath}/" +
+                $"{imageName}";
+        }
+
         public void DeleteImage(string imageName)
         {
+            if (imageName == null) return;
+            
             var image = GetPathOfImage(imageName);
             if (File.Exists(image))
                 File.Delete(image);
