@@ -48,11 +48,11 @@ namespace Core.Services
         {
             if (ad == null) throw new ArgumentNullException(nameof(ad));
 
+            await using var transaction = await Context.Database.BeginTransactionAsync();
+  
             var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
             if (user.AdsCount >= _userOptions.Value.AdCountLimit)
                 throw new ConstraintException($"User {user.Id} has reached his ad limit");
-
-            await using var transaction = await Context.Database.BeginTransactionAsync();
             
             var newAd = Mapper.Map<Ad>(ad);
             newAd.CreationDate = DateTime.Now;
