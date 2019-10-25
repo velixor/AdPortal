@@ -46,7 +46,7 @@ namespace Core.Services
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            await using var transaction = await Context.Database.BeginTransactionAsync();
+            await using var transaction = await Context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
 
             var user = await Context.Users.SingleAsync(x => x.Id == request.UserId);
             if (user.AdsCount >= _userOptions.Value.AdCountLimit)
