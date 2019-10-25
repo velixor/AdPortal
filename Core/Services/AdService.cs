@@ -71,7 +71,7 @@ namespace Core.Services
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var ad = await Entries().SingleAsync(x => x.Id == id);
+            var ad = await Entries.SingleAsync(x => x.Id == id);
 
             _imageHelper.DeleteImage(ad.ImageName);
             ad = Mapper.Map(request, ad);
@@ -95,11 +95,6 @@ namespace Core.Services
             
             await Context.SaveChangesAsync();
             await transaction.CommitAsync();
-        }
-
-        protected override IQueryable<Ad> Entries()
-        {
-            return Context.Ads.Include(ad => ad.User);
         }
     }
 }

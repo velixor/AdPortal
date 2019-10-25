@@ -14,10 +14,5 @@ namespace Core.Services
             : base(context, mapper, sieveProcessor)
         {
         }
-
-        protected override IQueryable<User> Entries()
-        {
-            return Context.Users;
-        }
     }
 }
