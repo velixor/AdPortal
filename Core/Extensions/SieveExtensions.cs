@@ -7,7 +7,6 @@ namespace Core.Extensions
 {
     public static class SieveExtensions
     {
-        // TODO check is "ref" really needed
         public static int ApplyAndCount<T>(this ISieveProcessor sieveProcessor, SieveModel sieveModel,
             ref IQueryable<T> entries) where T : IEntity
         {
