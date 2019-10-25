@@ -13,11 +13,13 @@ namespace Api.Controllers
         {
         }
 
+        [HttpPost]
         public override Task<UserResponse> Post([FromBody] UserRequest request)
         {
             return base.Post(request);
         }
 
+        [HttpPut]
         public override Task<UserResponse> Put(Guid id, [FromBody] UserRequest request)
         {
             return base.Put(id, request);
