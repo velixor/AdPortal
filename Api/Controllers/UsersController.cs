@@ -22,5 +22,11 @@ namespace Api.Controllers
         {
             return base.Put(id, request);
         }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public override Task<ActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
+        }
     }
 }
