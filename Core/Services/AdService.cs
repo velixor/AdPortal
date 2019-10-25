@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,11 +8,9 @@ using Core.Helpers;
 using Core.Options;
 using Data;
 using Data.Models;
-using Dto.Contracts;
 using Dto.Contracts.AdContracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Sieve.Models;
 using Sieve.Services;
 
 namespace Core.Services
@@ -22,6 +20,20 @@ namespace Core.Services
         private readonly IOptions<UserOptions> _userOptions;
         private readonly IImageHelper _imageHelper;
 
+        protected override AdResponse MapToResponse(Ad ad)
+        {
+            var response = base.MapToResponse(ad);
+            _imageHelper.ImageNameToImageUrl(response);
+            return response;
+        }
+
+        protected override List<AdResponse> MapToResponses(IQueryable<Ad> entries)
+        {
+            var result = base.MapToResponses(entries);
+            result.ForEach(_imageHelper.ImageNameToImageUrl);
+            return result;
+        }
+
         public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
             IOptions<UserOptions> userOptions, IImageHelper imageHelper)
             : base(context, mapper, sieveProcessor)
@@ -30,41 +42,27 @@ namespace Core.Services
             _imageHelper = imageHelper ?? throw new ArgumentNullException(nameof(imageHelper));
         }
 
-        public override async Task<AdResponse> GetByIdAsync(Guid id)
+        public override async Task<AdResponse> CreateNewAsync(AdRequest request)
         {
-            var result = await base.GetByIdAsync(id);
-            _imageHelper.ImageNameToImageUrl(result);
-            return result;
-        }
-
-        public override PagingResponse<AdResponse> Get(SieveModel sieveModel)
-        {
-            var result = base.Get(sieveModel);
-            result.Items.ForEach(_imageHelper.ImageNameToImageUrl);
-            return result;
-        }
-
-        public override async Task<AdResponse> CreateNewAsync(AdRequest ad)
-        {
-            if (ad == null) throw new ArgumentNullException(nameof(ad));
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             await using var transaction = await Context.Database.BeginTransactionAsync();
-  
-            var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
+
+            var user = await Context.Users.SingleAsync(x => x.Id == request.UserId);
             if (user.AdsCount >= _userOptions.Value.AdCountLimit)
                 throw new ConstraintException($"User {user.Id} has reached his ad limit");
-            
-            var newAd = Mapper.Map<Ad>(ad);
-            newAd.CreationDate = DateTime.Now;
-            newAd.ImageName = await _imageHelper.UploadImageAndGetNameAsync(ad.Image);
-                
-            Context.Ads.Add(newAd);
+
+            var ad = MapFromRequest(request);
+            ad.CreationDate = DateTime.Now;
+            ad.ImageName = await _imageHelper.UploadImageAndGetNameAsync(request.Image);
+
+            Context.Ads.Add(ad);
             user.AdsCount++;
-            
+
             await Context.SaveChangesAsync();
             await transaction.CommitAsync();
-                
-            return Mapper.Map<AdResponse>(newAd);
+
+            return MapToResponse(ad);
         }
 
         public override async Task<AdResponse> UpdateAsync(Guid id, AdRequest request)
@@ -79,7 +77,7 @@ namespace Core.Services
 
             await Context.SaveChangesAsync();
 
-            return Mapper.Map<AdResponse>(ad);
+            return MapToResponse(ad);
         }
 
         public override async Task DeleteByIdAsync(Guid id)
@@ -87,12 +85,12 @@ namespace Core.Services
             var ad = await Context.Ads.SingleAsync(x => x.Id == id);
 
             await using var transaction = await Context.Database.BeginTransactionAsync();
-            
+
             _imageHelper.DeleteImage(ad.ImageName);
             Context.Ads.Remove(ad);
             var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
             user.AdsCount--;
-            
+
             await Context.SaveChangesAsync();
             await transaction.CommitAsync();
         }

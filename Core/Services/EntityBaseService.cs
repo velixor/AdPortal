@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Core.Extensions;
 using Data;
 using Data.Models;
@@ -21,7 +22,19 @@ namespace Core.Services
         protected readonly AdPortalContext Context;
         protected readonly IMapper Mapper;
         protected readonly ISieveProcessor SieveProcessor;
-        protected virtual IQueryable<T> Entries => Context.Set<T>();
+
+        protected virtual IQueryable<T> Entries
+            => Context.Set<T>();
+
+        protected virtual TResponse MapToResponse(T entry)
+            => Mapper.Map<TResponse>(entry);
+
+        protected virtual List<TResponse> MapToResponses(IQueryable<T> entries)
+            => Mapper.ProjectTo<TResponse>(entries).ToList();
+
+        protected virtual T MapFromRequest(TRequest request)
+            => Mapper.Map<T>(request);
+
 
         protected EntityBaseService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
         {
@@ -33,7 +46,7 @@ namespace Core.Services
         public virtual async Task<TResponse> GetByIdAsync(Guid id)
         {
             var entry = await Entries.AsNoTracking().SingleAsync(x => x.Id == id);
-            return Mapper.Map<TResponse>(entry);
+            return MapToResponse(entry);
         }
 
         public virtual PagingResponse<TResponse> Get(SieveModel sieveModel)
@@ -45,7 +58,7 @@ namespace Core.Services
 
             return new PagingResponse<TResponse>
             {
-                Items = Mapper.ProjectTo<TResponse>(entries).ToList(),
+                Items = MapToResponses(entries),
                 Count = count
             };
         }
@@ -54,11 +67,11 @@ namespace Core.Services
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var newEntry = Mapper.Map<T>(request);
+            var newEntry = MapFromRequest(request);
             Context.Set<T>().Add(newEntry);
             await Context.SaveChangesAsync();
 
-            return Mapper.Map<TResponse>(newEntry);
+            return MapToResponse(newEntry);
         }
 
         public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest request)
@@ -69,7 +82,7 @@ namespace Core.Services
             entry = Mapper.Map(request, entry);
             await Context.SaveChangesAsync();
 
-            return Mapper.Map<TResponse>(entry);
+            return MapToResponse(entry);
         }
 
         public virtual async Task DeleteByIdAsync(Guid id)
@@ -79,7 +92,7 @@ namespace Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public async Task<bool> IsExistAsync(Guid id)
+        public virtual async Task<bool> IsExistAsync(Guid id)
         {
             return await Context.Set<T>().AsNoTracking().AnyAsync(x => x.Id == id);
         }
