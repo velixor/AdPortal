@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Data;
 using Data.Models;
 using Dto.Contracts.UserContracts;
-using Microsoft.EntityFrameworkCore;
 using Sieve.Services;
 
 namespace Core.Services

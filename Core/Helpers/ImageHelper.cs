@@ -16,7 +16,7 @@ namespace Core.Helpers
         public ImageHelper(IOptions<StaticFilesOptions> staticFilesOptions, IHttpContextAccessor contextAccessor)
         {
             _staticFilesOptions = staticFilesOptions ?? throw new ArgumentNullException(nameof(staticFilesOptions));
-            _contextAccessor = contextAccessor;
+            _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
         }
         
         public async Task<string> UploadImageAndGetNameAsync(IFormFile image)

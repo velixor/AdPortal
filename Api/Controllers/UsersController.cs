@@ -9,7 +9,8 @@ namespace Api.Controllers
 {
     public class UsersController : EntityBaseController<User, UserRequest, UserResponse>
     {
-        public UsersController(IUserService entityService) : base(entityService)
+        public UsersController(IUserService entityService)
+            : base(entityService)
         {
         }
 
