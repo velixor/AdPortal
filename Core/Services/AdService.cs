@@ -1,98 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Core.Helpers;
-using Core.Options;
-using Data;
 using Data.Models;
+using Dto.Contracts;
 using Dto.Contracts.AdContracts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Sieve.Services;
+using Sieve.Models;
 
 namespace Core.Services
 {
-    public class AdService : EntityBaseService<Ad, AdRequest, AdResponse>, IAdService
+    public class AdService : IAdService
     {
-        private readonly IOptions<UserOptions> _userOptions;
-        private readonly IImageHelper _imageHelper;
+        private readonly IEntityServiceHelper<Ad> _serviceHelper;
 
-        protected override AdResponse MapToResponse(Ad ad)
+        public AdService(IEntityServiceHelper<Ad> serviceHelper)
         {
-            var response = base.MapToResponse(ad);
-            _imageHelper.ImageNameToImageUrl(response);
-            return response;
+            _serviceHelper = serviceHelper;
         }
 
-        protected override List<AdResponse> MapToResponses(IQueryable<Ad> entries)
+
+        public async Task<TRequest> GetByIdAsync<TRequest>(Guid id) where TRequest : IAdResponse
         {
-            var result = base.MapToResponses(entries);
-            result.ForEach(_imageHelper.ImageNameToImageUrl);
-            return result;
+            return await _serviceHelper.GetByIdAsync<TRequest>(id);
         }
 
-        public AdService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor,
-            IOptions<UserOptions> userOptions, IImageHelper imageHelper)
-            : base(context, mapper, sieveProcessor)
+        public PagingResponse<TRequest> Get<TRequest>(SieveModel sieveModel) where TRequest : IAdResponse
         {
-            _userOptions = userOptions ?? throw new ArgumentNullException(nameof(userOptions));
-            _imageHelper = imageHelper ?? throw new ArgumentNullException(nameof(imageHelper));
+            return _serviceHelper.Get<TRequest>(sieveModel);
         }
 
-        public override async Task<AdResponse> CreateNewAsync(AdRequest request)
+        public async Task<TRequest> CreateNewAsync<TRequest>(IAdRequest request) where TRequest : IAdResponse
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
-            await using var transaction = await Context.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
-
-            var user = await Context.Users.SingleAsync(x => x.Id == request.UserId);
-            if (user.AdsCount >= _userOptions.Value.AdCountLimit)
-                throw new ConstraintException($"User {user.Id} has reached his ad limit");
-
-            var ad = MapFromRequest(request);
-            ad.CreationDate = DateTime.Now;
-            ad.ImageName = await _imageHelper.UploadImageAndGetNameAsync(request.Image);
-
-            Context.Ads.Add(ad);
-            user.AdsCount++;
-
-            await Context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            return MapToResponse(ad);
+            return await _serviceHelper.CreateNewAsync<TRequest>(request);
         }
 
-        public override async Task<AdResponse> UpdateAsync(Guid id, AdRequest request)
+        public async Task<TRequest> UpdateAsync<TRequest>(Guid id, IAdRequest request) where TRequest : IAdResponse
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
-            var ad = await Entries.SingleAsync(x => x.Id == id);
-
-            _imageHelper.DeleteImage(ad.ImageName);
-            ad = Mapper.Map(request, ad);
-            ad.ImageName = await _imageHelper.UploadImageAndGetNameAsync(request.Image);
-
-            await Context.SaveChangesAsync();
-
-            return MapToResponse(ad);
+            return await _serviceHelper.UpdateAsync<TRequest>(id, request);
         }
 
-        public override async Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            var ad = await Context.Ads.SingleAsync(x => x.Id == id);
+            await _serviceHelper.DeleteByIdAsync(id);
+        }
 
-            await using var transaction = await Context.Database.BeginTransactionAsync();
-
-            _imageHelper.DeleteImage(ad.ImageName);
-            Context.Ads.Remove(ad);
-            var user = await Context.Users.SingleAsync(x => x.Id == ad.UserId);
-            user.AdsCount--;
-
-            await Context.SaveChangesAsync();
-            await transaction.CommitAsync();
+        public async Task<bool> IsExistAsync(Guid id)
+        {
+            return await _serviceHelper.IsExistAsync(id);
         }
     }
 }

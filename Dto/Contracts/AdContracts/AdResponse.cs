@@ -2,7 +2,7 @@
 
 namespace Dto.Contracts.AdContracts
 {
-    public class AdResponse
+    public class AdResponse : IAdResponse, IHasImage
     {
         public Guid Id { get; set; }
         public int Number { get; set; }

@@ -6,6 +6,7 @@ using Core.Mapping;
 using Core.Options;
 using Core.Services;
 using Data;
+using Data.Models;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,8 +48,11 @@ namespace Api
             services.AddDbContext<AdPortalContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEntityServiceHelper<Ad>, AdServiceHelper>();
+            services.AddScoped<IEntityServiceHelper<User>, UserServiceHelper>();
             services.AddScoped<IAdService, AdService>();
+            services.AddScoped<IUserService, UserService>();
+            
             services.AddScoped<ISieveProcessor, MappingSieveProcessor>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

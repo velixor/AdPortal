@@ -1,29 +1,58 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Services;
-using Data.Models;
+using Dto.Contracts;
 using Dto.Contracts.UserContracts;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 
 namespace Api.Controllers
 {
-    public class UsersController : EntityBaseController<User, UserRequest, UserResponse>
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
     {
-        public UsersController(IUserService entityService)
-            : base(entityService)
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
         {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<UserResponse> Get([FromRoute] Guid id)
+        {
+            var entry = await _userService.GetByIdAsync<UserResponse>(id);
+            return entry;
+        }
+
+        // Get with filtering, sorting and paginating
+        [HttpGet]
+        public PagingResponse<UserResponse> Get([FromQuery] SieveModel sieveModel)
+        {
+            return _userService.Get<UserResponse>(sieveModel);
         }
 
         [HttpPost]
-        public override Task<UserResponse> Post([FromBody] UserRequest request)
+        public async Task<UserResponse> Post([FromBody] UserRequest request)
         {
-            return base.Post(request);
+            var newEntry = await _userService.CreateNewAsync<UserResponse>(request);
+            return newEntry;
         }
 
-        [HttpPut]
-        public override Task<UserResponse> Put(Guid id, [FromBody] UserRequest request)
+        [HttpPut("{id}")]
+        public async Task<UserResponse> Put(Guid id, [FromBody] UserRequest request)
         {
-            return base.Put(id, request);
+            var updatedEntry = await _userService.UpdateAsync<UserResponse>(id, request);
+            return updatedEntry;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            await _userService.DeleteByIdAsync(id);
+            return NoContent();
         }
     }
 }

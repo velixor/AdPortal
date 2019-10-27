@@ -11,44 +11,41 @@ using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
-namespace Core.Services
+namespace Core.Helpers
 {
-    public abstract class EntityBaseService<T, TRequest, TResponse> : IEntityBaseService<T, TRequest, TResponse>
-        where T : class, IEntity
-        where TRequest : class
-        where TResponse : class
+    public class EntityServiceHelper<T> : IEntityServiceHelper<T> where T : class, IEntity
     {
-        protected readonly AdPortalContext Context;
-        protected readonly IMapper Mapper;
-        protected readonly ISieveProcessor SieveProcessor;
+        public readonly AdPortalContext Context;
+        public readonly IMapper Mapper;
+        public readonly ISieveProcessor SieveProcessor;
 
-        protected virtual IQueryable<T> Entries
+        public virtual IQueryable<T> Entries
             => Context.Set<T>();
 
-        protected virtual TResponse MapToResponse(T entry)
+        public virtual TResponse MapToResponse<TResponse>(T entry) where TResponse : IResponse
             => Mapper.Map<TResponse>(entry);
 
-        protected virtual List<TResponse> MapToResponses(IQueryable<T> entries)
+        public virtual List<TResponse> MapToResponses<TResponse>(IQueryable<T> entries) where TResponse : IResponse
             => Mapper.ProjectTo<TResponse>(entries).ToList();
 
-        protected virtual T MapFromRequest(TRequest request)
+        public virtual T MapFromRequest(IRequest request)
             => Mapper.Map<T>(request);
 
 
-        protected EntityBaseService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
+        public EntityServiceHelper(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             SieveProcessor = sieveProcessor ?? throw new ArgumentNullException(nameof(sieveProcessor));
         }
 
-        public virtual async Task<TResponse> GetByIdAsync(Guid id)
+        public virtual async Task<TResponse> GetByIdAsync<TResponse>(Guid id) where TResponse : IResponse
         {
             var entry = await Entries.AsNoTracking().SingleAsync(x => x.Id == id);
-            return MapToResponse(entry);
+            return MapToResponse<TResponse>(entry);
         }
 
-        public virtual PagingResponse<TResponse> Get(SieveModel sieveModel)
+        public virtual PagingResponse<TResponse> Get<TResponse>(SieveModel sieveModel) where TResponse : IResponse
         {
             if (sieveModel == null) throw new ArgumentNullException(nameof(sieveModel));
 
@@ -57,12 +54,12 @@ namespace Core.Services
 
             return new PagingResponse<TResponse>
             {
-                Items = MapToResponses(entries),
+                Items = MapToResponses<TResponse>(entries),
                 Count = count
             };
         }
 
-        public virtual async Task<TResponse> CreateNewAsync(TRequest request)
+        public virtual async Task<TResponse> CreateNewAsync<TResponse>(IRequest request) where TResponse : IResponse
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -70,10 +67,11 @@ namespace Core.Services
             Context.Set<T>().Add(newEntry);
             await Context.SaveChangesAsync();
 
-            return MapToResponse(newEntry);
+            return MapToResponse<TResponse>(newEntry);
         }
 
-        public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest request)
+        public virtual async Task<TResponse> UpdateAsync<TResponse>(Guid id, IRequest request)
+            where TResponse : IResponse
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -81,7 +79,7 @@ namespace Core.Services
             entry = Mapper.Map(request, entry);
             await Context.SaveChangesAsync();
 
-            return MapToResponse(entry);
+            return MapToResponse<TResponse>(entry);
         }
 
         public virtual async Task DeleteByIdAsync(Guid id)

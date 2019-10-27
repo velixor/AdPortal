@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Core.Options;
+using Dto.Contracts;
 using Dto.Contracts.AdContracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ namespace Core.Helpers
             return imageName;
         }
 
-        public void ImageNameToImageUrl(AdResponse ad)
+        public void ImageNameToImageUrl(IHasImage ad)
         {
             if (ad == null) throw new ArgumentNullException(nameof(ad));
             if (ad.Image == null) return;
