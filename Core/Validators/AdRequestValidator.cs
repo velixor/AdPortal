@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Core.Validators
 {
-    public class AdRequestValidator : AbstractValidator<AdRequest>
+    public class AdRequestValidator : AbstractValidator<AdCreateRequest>
     {
         public AdRequestValidator()
         {

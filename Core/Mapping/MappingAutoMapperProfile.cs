@@ -11,7 +11,8 @@ namespace Core.Mapping
         {
             CreateMap<Ad, AdResponse>().ForMember(response => response.Image,
                 opt => opt.MapFrom(ad => ad.ImageName));
-            CreateMap<AdRequest, Ad>();
+            CreateMap<AdUpdateRequest, Ad>();
+            CreateMap<AdCreateRequest, Ad>();
 
             CreateMap<UserRequest, User>();
             CreateMap<User, UserResponse>();

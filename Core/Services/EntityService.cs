@@ -11,28 +11,38 @@ using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
-namespace Core.Helpers
+namespace Core.Services
 {
-    public class EntityServiceHelper<T> : IEntityServiceHelper<T> where T : class, IEntity
+    public class EntityService<T> : IEntityService<T> where T : class, IEntity
     {
-        public readonly AdPortalContext Context;
-        public readonly IMapper Mapper;
-        public readonly ISieveProcessor SieveProcessor;
+        protected readonly AdPortalContext Context;
+        protected readonly IMapper Mapper;
+        protected readonly ISieveProcessor SieveProcessor;
 
-        public virtual IQueryable<T> Entries
+        protected virtual IQueryable<T> Entries
             => Context.Set<T>();
 
-        public virtual TResponse MapToResponse<TResponse>(T entry) where TResponse : IResponse
-            => Mapper.Map<TResponse>(entry);
+        protected virtual TResponse MapToResponse<TResponse>(T entry) where TResponse : IResponse
+        {
+            var response = Mapper.Map<TResponse>(entry);
+            AdaptResponse(response);
+            return response;
+        }
 
-        public virtual List<TResponse> MapToResponses<TResponse>(IQueryable<T> entries) where TResponse : IResponse
-            => Mapper.ProjectTo<TResponse>(entries).ToList();
+        protected virtual List<TResponse> MapToResponses<TResponse>(IQueryable<T> entries) where TResponse : IResponse
+        {
+            var responses = Mapper.ProjectTo<TResponse>(entries).ToList();
+            responses.ForEach(AdaptResponse);
+            return responses;
+        }
 
-        public virtual T MapFromRequest(IRequest request)
+        protected virtual T MapFromRequest(IRequest request)
             => Mapper.Map<T>(request);
 
+        protected virtual void AdaptResponse<TResponse>(TResponse response)
+        {}
 
-        public EntityServiceHelper(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
+        public EntityService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

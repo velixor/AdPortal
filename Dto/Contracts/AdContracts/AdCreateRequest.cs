@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Dto.Contracts.AdContracts
 {
-    public class AdRequest : IAdRequest
+    public class AdCreateRequest : IRequest
     {
         public Guid UserId { get; set; }
         public string Content { get; set; }

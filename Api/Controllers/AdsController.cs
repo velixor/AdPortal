@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Services;
+using Data.Models;
 using Dto.Contracts;
 using Dto.Contracts.AdContracts;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +13,13 @@ namespace Api.Controllers
     [ApiController]
     public class AdsController : ControllerBase
     {
-        private readonly IAdService _adService;
+        private readonly IEntityService<Ad> _adService;
 
-        public AdsController(IAdService adService)
+        public AdsController(IEntityService<Ad> adService)
         {
             _adService = adService ?? throw new ArgumentNullException(nameof(adService));
         }
-
-
+        
         [HttpGet("{id}")]
         public async Task<AdResponse> Get([FromRoute] Guid id)
         {
@@ -35,16 +35,16 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<AdResponse> Post([FromForm] AdRequest request)
+        public async Task<AdResponse> Post([FromForm] AdCreateRequest createRequest)
         {
-            var newEntry = await _adService.CreateNewAsync<AdResponse>(request);
+            var newEntry = await _adService.CreateNewAsync<AdResponse>(createRequest);
             return newEntry;
         }
 
         [HttpPut("{id}")]
-        public async Task<AdResponse> Put(Guid id, [FromForm] AdRequest request)
+        public async Task<AdResponse> Put(Guid id, [FromForm] AdUpdateRequest createRequest)
         {
-            var updatedEntry = await _adService.UpdateAsync<AdResponse>(id, request);
+            var updatedEntry = await _adService.UpdateAsync<AdResponse>(id, createRequest);
             return updatedEntry;
         }
 

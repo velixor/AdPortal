@@ -48,10 +48,8 @@ namespace Api
             services.AddDbContext<AdPortalContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            services.AddScoped<IEntityServiceHelper<Ad>, AdServiceHelper>();
-            services.AddScoped<IEntityServiceHelper<User>, UserServiceHelper>();
-            services.AddScoped<IAdService, AdService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEntityService<Ad>, AdService>();
+            services.AddScoped<IEntityService<User>, UserService>();
             
             services.AddScoped<ISieveProcessor, MappingSieveProcessor>();
             services.AddScoped<IImageHelper, ImageHelper>();

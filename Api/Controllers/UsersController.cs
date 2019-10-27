@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Core.Services;
+using Data.Models;
 using Dto.Contracts;
 using Dto.Contracts.UserContracts;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ namespace Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IEntityService<User> _userService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IEntityService<User> userService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }

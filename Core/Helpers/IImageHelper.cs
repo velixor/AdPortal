@@ -8,7 +8,7 @@ namespace Core.Helpers
     public interface IImageHelper
     {
         Task<string> UploadImageAndGetNameAsync(IFormFile image);
-        void ImageNameToImageUrl(IHasImage ad);
+        void ImageNameToImageUrl(IHasImage hasImage);
         void DeleteImage(string imageName);
     }
 }

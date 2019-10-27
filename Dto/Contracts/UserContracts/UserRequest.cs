@@ -1,6 +1,6 @@
 ﻿namespace Dto.Contracts.UserContracts
 {
-    public class UserRequest : IUserRequest
+    public class UserRequest : IRequest
     {
         public string Name { get; set; }
     }

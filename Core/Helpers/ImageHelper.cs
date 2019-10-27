@@ -34,12 +34,12 @@ namespace Core.Helpers
             return imageName;
         }
 
-        public void ImageNameToImageUrl(IHasImage ad)
+        public void ImageNameToImageUrl(IHasImage hasImage)
         {
-            if (ad == null) throw new ArgumentNullException(nameof(ad));
-            if (ad.Image == null) return;
+            if (hasImage == null) throw new ArgumentNullException(nameof(hasImage));
+            if (hasImage.Image == null) return;
 
-            ad.Image = GetImageUrl(ad.Image);
+            hasImage.Image = GetImageUrl(hasImage.Image);
         }
 
         public void DeleteImage(string imageName)
