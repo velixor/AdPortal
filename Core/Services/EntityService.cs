@@ -13,7 +13,7 @@ using Sieve.Services;
 
 namespace Core.Services
 {
-    public class EntityService<T> : IEntityService<T> where T : class, IEntity
+    public abstract class EntityService<T> : IEntityService<T> where T : class, IEntity
     {
         protected readonly AdPortalContext Context;
         protected readonly IMapper Mapper;
@@ -38,9 +38,11 @@ namespace Core.Services
 
         protected virtual T MapFromRequest(IRequest request)
             => Mapper.Map<T>(request);
-
+        
         protected virtual void AdaptResponse<TResponse>(TResponse response)
         {}
+
+        protected abstract bool IsAuthorized(Guid id, Guid userId);
 
         public EntityService(AdPortalContext context, IMapper mapper, ISieveProcessor sieveProcessor)
         {
@@ -68,23 +70,13 @@ namespace Core.Services
                 Count = count
             };
         }
-
-        public virtual async Task<TResponse> CreateNewAsync<TResponse>(IRequest request) where TResponse : IResponse
-        {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
-            var newEntry = MapFromRequest(request);
-            Context.Set<T>().Add(newEntry);
-            await Context.SaveChangesAsync();
-
-            return MapToResponse<TResponse>(newEntry);
-        }
-
-        public virtual async Task<TResponse> UpdateAsync<TResponse>(Guid id, IRequest request)
+        
+        public virtual async Task<TResponse> UpdateAsync<TResponse>(Guid id, IRequest request, Guid userId)
             where TResponse : IResponse
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
+            if (!IsAuthorized(id, userId)) throw new UnauthorizedAccessException(nameof(request));
+            
             var entry = await Entries.SingleAsync(x => x.Id == id);
             entry = Mapper.Map(request, entry);
             await Context.SaveChangesAsync();
@@ -92,8 +84,10 @@ namespace Core.Services
             return MapToResponse<TResponse>(entry);
         }
 
-        public virtual async Task DeleteByIdAsync(Guid id)
+        public virtual async Task DeleteByIdAsync(Guid id, Guid userId)
         {
+            if (!IsAuthorized(id, userId)) throw new UnauthorizedAccessException();
+            
             var entry = await Context.Set<T>().SingleAsync(x => x.Id == id);
             Context.Set<T>().Remove(entry);
             await Context.SaveChangesAsync();

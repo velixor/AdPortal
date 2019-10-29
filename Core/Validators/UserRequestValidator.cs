@@ -3,13 +3,18 @@ using FluentValidation;
 
 namespace Core.Validators
 {
-    public class UserRequestValidator : AbstractValidator<UserRequest>
+    public class UserRequestValidator : AbstractValidator<UserCreateRequest>
     {
         public UserRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .Matches(@"^[a-zA-Z]+(?:[_-]?[a-zA-Z0-9])*$");
+                .Matches(@"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$");
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .EmailAddress();
+            RuleFor(x => x.Password)
+                .NotEmpty();
         }
     }
 }

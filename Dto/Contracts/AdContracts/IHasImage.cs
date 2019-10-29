@@ -1,4 +1,4 @@
-﻿namespace Dto.Contracts
+﻿namespace Dto.Contracts.AdContracts
 {
     public interface IHasImage
     {

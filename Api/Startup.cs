@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Api.Filters;
+using Api.Services;
 using AutoMapper;
 using Core.Helpers;
 using Core.Mapping;
@@ -8,6 +9,7 @@ using Core.Services;
 using Data;
 using Data.Models;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +41,11 @@ namespace Api
 
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); })
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(coreAssembly));
+           
+            services.AddCors();
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
+                    ("BasicAuthentication", null);
 
             services.AddAutoMapper(coreAssembly);
 
@@ -48,9 +55,9 @@ namespace Api
             services.AddDbContext<AdPortalContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            services.AddScoped<IEntityService<Ad>, AdService>();
-            services.AddScoped<IEntityService<User>, UserService>();
-            
+            services.AddScoped<IAdService, AdService>();
+            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<ISieveProcessor, MappingSieveProcessor>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -68,7 +75,15 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseSwagger();

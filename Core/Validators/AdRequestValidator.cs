@@ -9,7 +9,6 @@ namespace Core.Validators
         public AdRequestValidator()
         {
             RuleFor(ad => ad.Content).NotEmpty();
-            RuleFor(ad => ad.UserId).Must(x => x != Guid.Empty);
             RuleFor(ad => ad.Image)
                 .Must(x =>
                 {

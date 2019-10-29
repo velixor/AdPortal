@@ -1,26 +1,32 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Authentication;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Services;
 using Data.Models;
 using Dto.Contracts;
 using Dto.Contracts.UserContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sieve.Models;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IEntityService<User> _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(IEntityService<User> userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<UserResponse> Get([FromRoute] Guid id)
         {
@@ -29,31 +35,48 @@ namespace Api.Controllers
         }
 
         // Get with filtering, sorting and paginating
+        [AllowAnonymous]
         [HttpGet]
         public PagingResponse<UserResponse> Get([FromQuery] SieveModel sieveModel)
         {
             return _userService.Get<UserResponse>(sieveModel);
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<UserResponse> Post([FromBody] UserRequest request)
+        public async Task<UserResponse> Post([FromBody] UserCreateRequest createRequest)
         {
-            var newEntry = await _userService.CreateNewAsync<UserResponse>(request);
+            var newEntry = await _userService.CreateNewAsync<UserResponse>(createRequest);
+            return newEntry;
+        }
+        
+        [AllowAnonymous]
+        [HttpPost("auth")]
+        public async Task<UserResponse> Post([FromBody] UserAuthRequest request)
+        {
+            var newEntry = await _userService.AuthenticateAsync<UserResponse>(request);
+            
+            if (newEntry == null)
+                throw new AuthenticationException("Username or password is incorrect" );
+
             return newEntry;
         }
 
         [HttpPut("{id}")]
-        public async Task<UserResponse> Put(Guid id, [FromBody] UserRequest request)
+        public async Task<UserResponse> Put(Guid id, [FromBody] UserCreateRequest createRequest)
         {
-            var updatedEntry = await _userService.UpdateAsync<UserResponse>(id, request);
+            var updatedEntry = await _userService.UpdateAsync<UserResponse>(id, createRequest, UserId);
             return updatedEntry;
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            await _userService.DeleteByIdAsync(id);
+            await _userService.DeleteByIdAsync(id, UserId);
             return NoContent();
         }
+        
+        private Guid UserId =>
+            Guid.Parse(User.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
     }
 }
