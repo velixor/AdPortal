@@ -4,7 +4,9 @@ namespace Dto.Contracts.UserContracts
 {
     public class UserRegisterRequest : IRequest
     {
+        [Required(ErrorMessage ="Name not specified")]
         public string Name { get; set; }
+        
         [Required(ErrorMessage ="Email not specified")]
         public string Email { get; set; }
          

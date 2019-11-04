@@ -56,22 +56,31 @@ namespace Mvc.Services
         public async Task RegisterAsync(UserRegisterRequest registerRequest)
         {
             var loginRequest = _mapper.Map<UserLoginRequest>(registerRequest);
-            await _userService.RegisterNewAsync<UserResponse>(registerRequest);
+            await _userService.RegisterNewAsync(registerRequest);
             await LoginAsync(loginRequest);
         }
 
-        public UserInfo User => new UserInfo
+        public UserInfo User
         {
-            Email = _httpContext.User.Claims.SingleOrDefault(x => x.Type == "Email")?.Value,
-            Id = _httpContext.User.Claims.SingleOrDefault(x => x.Type == "Id")?.Value
-        };
+            get
+            {
+                var email = _httpContext.User.Claims.SingleOrDefault(x => x.Type == "Email")?.Value;
+                Guid.TryParse(_httpContext.User.Claims.SingleOrDefault(x => x.Type == "Id")?.Value, out var id);
+                
+                return new UserInfo
+                {
+                    Email = email,
+                    Id = id
+                };
+            }
+        }
 
-        public bool IsLogged => User.Email != null && User.Id != null;
+        public bool IsLogged => User.Email != null && User.Id != Guid.Empty;
     }
 
     public class UserInfo
     {
         public string Email { get; set; }
-        public string Id { get; set; }
+        public Guid Id { get; set; }
     }
 }
