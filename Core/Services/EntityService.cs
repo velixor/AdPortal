@@ -57,9 +57,9 @@ namespace Core.Services
             return MapToResponse<TResponse>(entry);
         }
 
-        public virtual PagingResponse<TResponse> Get<TResponse>(SieveModel sieveModel) where TResponse : IResponse
+        public virtual PagingResponse<TResponse> Get<TResponse>(SieveModel sieveModel = null) where TResponse : IResponse
         {
-            if (sieveModel == null) throw new ArgumentNullException(nameof(sieveModel));
+            if (sieveModel == null) sieveModel = new SieveModel();
 
             var entries = Entries.AsNoTracking();
             var count = SieveProcessor.ApplyAndCount(sieveModel, ref entries);

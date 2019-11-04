@@ -1,0 +1,112 @@
+2019-11-04 13:23:48.0582|10403|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.0.0 initialized 'AdPortalContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None 
+2019-11-04 13:24:15.1538|10403|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.0.0 initialized 'AdPortalContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None 
+2019-11-04 13:24:15.8120|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory'); 
+2019-11-04 13:24:16.0203|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory'); 
+2019-11-04 13:24:16.0429|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId"; 
+2019-11-04 13:24:16.0734|20402|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20191104112348_AddIdentity'. 
+2019-11-04 13:24:16.0993|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX "IX_Users_Name"; 
+2019-11-04 13:24:16.1911|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_Users_Email" ON "Users" ("Email"); 
+2019-11-04 13:24:16.2320|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20191104112348_AddIdentity', '3.0.0'); 
+2019-11-04 14:30:36.1751||DEBUG|Api.Program|init main 
+2019-11-04 14:30:37.8917||INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\velixor\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2019-11-04 14:30:38.3166||INFO|Microsoft.Hosting.Lifetime|Now listening on: http://127.0.0.1:9640 
+2019-11-04 14:30:38.3166||INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down. 
+2019-11-04 14:30:38.3166||INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development 
+2019-11-04 14:30:38.3166||INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\velixor\source\repos\csharp\AdPortal\Api 
+2019-11-04 14:30:38.4953|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/index.html   
+2019-11-04 14:30:38.9523|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:30:39.1559|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 661.1589ms 200 text/html;charset=utf-8 
+2019-11-04 14:30:39.2018|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/swagger-ui-standalone-preset.js   
+2019-11-04 14:30:39.2018|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/swagger-ui-bundle.js   
+2019-11-04 14:30:39.2018|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:30:39.2203|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:30:39.2397|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/swagger-ui.css   
+2019-11-04 14:30:39.2397|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:30:39.2646|6|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|The file /swagger-ui.css was not modified 
+2019-11-04 14:30:39.2646|6|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|The file /swagger-ui-standalone-preset.js was not modified 
+2019-11-04 14:30:39.2646|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 28.1639ms 304 text/css 
+2019-11-04 14:30:39.2646|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 66.1438ms 304 application/javascript 
+2019-11-04 14:30:39.2646|6|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|The file /swagger-ui-bundle.js was not modified 
+2019-11-04 14:30:39.2646|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 71.94760000000001ms 304 application/javascript 
+2019-11-04 14:30:40.1164|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/v1/swagger.json   
+2019-11-04 14:30:40.1252|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:30:40.2593|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 143.0508ms 200 application/json;charset=utf-8 
+2019-11-04 14:31:53.9367||DEBUG|Api.Program|init main 
+2019-11-04 14:31:54.3197||INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\velixor\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2019-11-04 14:31:54.4586||INFO|Microsoft.Hosting.Lifetime|Now listening on: http://127.0.0.1:18297 
+2019-11-04 14:31:54.4586||INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down. 
+2019-11-04 14:31:54.4586||INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development 
+2019-11-04 14:31:54.4586||INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\velixor\source\repos\csharp\AdPortal\Api 
+2019-11-04 14:31:54.7290|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/index.html   
+2019-11-04 14:31:54.9917|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:31:55.1595|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 431.5215ms 200 text/html;charset=utf-8 
+2019-11-04 14:32:06.9808|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 POST http://127.0.0.1:18297/iisintegration  0 
+2019-11-04 14:32:06.9808|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 2.5685000000000002ms 202  
+2019-11-04 14:32:06.9808||INFO|Microsoft.Hosting.Lifetime|Application is shutting down... 
+2019-11-04 14:44:45.3811||DEBUG|Api.Program|init main 
+2019-11-04 14:44:45.6655||INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\velixor\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2019-11-04 14:44:45.8618||INFO|Microsoft.Hosting.Lifetime|Now listening on: http://127.0.0.1:47210 
+2019-11-04 14:44:45.8618||INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down. 
+2019-11-04 14:44:45.8618||INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development 
+2019-11-04 14:44:45.8618||INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\velixor\source\repos\csharp\AdPortal\Api 
+2019-11-04 14:44:45.9890|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/index.html   
+2019-11-04 14:44:46.3641|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:44:46.5206|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 533.2040000000001ms 200 text/html;charset=utf-8 
+2019-11-04 14:44:46.8126|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/v1/swagger.json   
+2019-11-04 14:44:46.8126|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:44:46.9494|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 136.8651ms 200 application/json;charset=utf-8 
+2019-11-04 14:44:52.0708|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/api/Users   
+2019-11-04 14:44:52.0914|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:44:52.1070|0|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Api.Controllers.UsersController.Get (Api)' 
+2019-11-04 14:44:52.1567|3|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Get", controller = "Users"}. Executing controller action with signature Dto.Contracts.PagingResponse`1[Dto.Contracts.UserContracts.UserResponse] Get(Sieve.Models.SieveModel) on controller Api.Controllers.UsersController (Api). 
+2019-11-04 14:44:52.8163|10403|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.0.0 initialized 'AdPortalContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None 
+2019-11-04 14:44:53.4734|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)::INT
+FROM "Users" AS u 
+2019-11-04 14:44:53.5345|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT u."AdsCount", u."Email", u."Id", u."Name"
+FROM "Users" AS u
+ORDER BY (SELECT 1)
+LIMIT @__p_1 OFFSET @__p_0 
+2019-11-04 14:44:53.5441|1|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Dto.Contracts.PagingResponse`1[[Dto.Contracts.UserContracts.UserResponse, Dto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'. 
+2019-11-04 14:44:53.5668|2|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Api.Controllers.UsersController.Get (Api) in 1404.4253ms 
+2019-11-04 14:44:53.5668|1|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Api.Controllers.UsersController.Get (Api)' 
+2019-11-04 14:44:53.5668|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 1502.7242ms 200 application/json; charset=utf-8 
+2019-11-04 14:45:06.0730|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/api/Users   
+2019-11-04 14:45:06.1047|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:45:06.1211|0|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Api.Controllers.UsersController.Get (Api)' 
+2019-11-04 14:45:06.1211|3|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Get", controller = "Users"}. Executing controller action with signature Dto.Contracts.PagingResponse`1[Dto.Contracts.UserContracts.UserResponse] Get(Sieve.Models.SieveModel) on controller Api.Controllers.UsersController (Api). 
+2019-11-04 14:45:06.2048|10403|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.0.0 initialized 'AdPortalContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None 
+2019-11-04 14:45:06.2048|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)::INT
+FROM "Users" AS u 
+2019-11-04 14:45:06.2048|20100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executing DbCommand [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT u."AdsCount", u."Email", u."Id", u."Name"
+FROM "Users" AS u
+ORDER BY (SELECT 1)
+LIMIT @__p_1 OFFSET @__p_0 
+2019-11-04 14:45:06.2162|1|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Dto.Contracts.PagingResponse`1[[Dto.Contracts.UserContracts.UserResponse, Dto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'. 
+2019-11-04 14:45:06.2162|2|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Api.Controllers.UsersController.Get (Api) in 87.9195ms 
+2019-11-04 14:45:06.2162|1|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Api.Controllers.UsersController.Get (Api)' 
+2019-11-04 14:45:06.2162|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 150.3273ms 200 application/json; charset=utf-8 
+2019-11-04 14:45:06.3489|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/favicon.ico   
+2019-11-04 14:45:06.3489|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:45:06.3612|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 12.3252ms 404  
+2019-11-04 14:47:06.1473||DEBUG|Api.Program|init main 
+2019-11-04 14:47:06.4607||INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\velixor\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest. 
+2019-11-04 14:47:06.6450||INFO|Microsoft.Hosting.Lifetime|Now listening on: http://127.0.0.1:30633 
+2019-11-04 14:47:06.6450||INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down. 
+2019-11-04 14:47:06.6450||INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development 
+2019-11-04 14:47:06.6529||INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\velixor\source\repos\csharp\AdPortal\Api 
+2019-11-04 14:47:06.8637|1|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:44326/swagger/index.html   
+2019-11-04 14:47:07.2353|7|INFO|Api.Services.BasicAuthenticationHandler|BasicAuthentication was not authenticated. Failure message: Missing Authorization Header 
+2019-11-04 14:47:07.4909|2|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 627.6561ms 200 text/html;charset=utf-8 
