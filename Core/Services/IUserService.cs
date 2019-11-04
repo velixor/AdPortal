@@ -7,7 +7,7 @@ namespace Core.Services
 {
     public interface IUserService : IEntityService<User>
     {
-        Task<TResponse> CreateNewAsync<TResponse>(IRequest request) where TResponse : IResponse;
-        Task<TResponse> AuthenticateAsync<TResponse>(IRequest request) where TResponse : IResponse;
+        Task<TResponse> RegisterNewAsync<TResponse>(IRequest request) where TResponse : IResponse;
+        Task<TResponse> LoginAsync<TResponse>(IRequest request) where TResponse : IResponse;
     }
 }

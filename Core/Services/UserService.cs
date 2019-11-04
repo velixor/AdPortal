@@ -23,7 +23,7 @@ namespace Core.Services
             return Entries.SingleOrDefault(x => x.Id == id)?.Id == userId;
         }
 
-        public async Task<TResponse> CreateNewAsync<TResponse>(IRequest request) where TResponse : IResponse
+        public async Task<TResponse> RegisterNewAsync<TResponse>(IRequest request) where TResponse : IResponse
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -34,13 +34,13 @@ namespace Core.Services
             return MapToResponse<TResponse>(newEntry);
         }
 
-        public async Task<TResponse> AuthenticateAsync<TResponse>(IRequest request) where TResponse : IResponse
+        public async Task<TResponse> LoginAsync<TResponse>(IRequest request) where TResponse : IResponse
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            if (!(request is UserAuthRequest userRequest)) throw new InvalidCastException(nameof(request));
+            if (!(request is UserLoginRequest loginRequest)) throw new InvalidCastException(nameof(request));
 
             var user = await Context.Users.SingleOrDefaultAsync(x =>
-                x.Email == userRequest.Email && x.Password == userRequest.Password);
+                x.Email == loginRequest.Email && x.Password == loginRequest.Password);
 
             return MapToResponse<TResponse>(user);
         }

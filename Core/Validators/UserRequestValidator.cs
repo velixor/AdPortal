@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Core.Validators
 {
-    public class UserRequestValidator : AbstractValidator<UserCreateRequest>
+    public class UserRequestValidator : AbstractValidator<UserRegisterRequest>
     {
         public UserRequestValidator()
         {

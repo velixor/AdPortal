@@ -44,17 +44,17 @@ namespace Api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<UserResponse> Post([FromBody] UserCreateRequest createRequest)
+        public async Task<UserResponse> Post([FromBody] UserRegisterRequest registerRequest)
         {
-            var newEntry = await _userService.CreateNewAsync<UserResponse>(createRequest);
+            var newEntry = await _userService.RegisterNewAsync<UserResponse>(registerRequest);
             return newEntry;
         }
         
         [AllowAnonymous]
         [HttpPost("auth")]
-        public async Task<UserResponse> Post([FromBody] UserAuthRequest request)
+        public async Task<UserResponse> Post([FromBody] UserLoginRequest request)
         {
-            var newEntry = await _userService.AuthenticateAsync<UserResponse>(request);
+            var newEntry = await _userService.LoginAsync<UserResponse>(request);
             
             if (newEntry == null)
                 throw new AuthenticationException("Username or password is incorrect" );
@@ -63,9 +63,9 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<UserResponse> Put(Guid id, [FromBody] UserCreateRequest createRequest)
+        public async Task<UserResponse> Put(Guid id, [FromBody] UserRegisterRequest registerRequest)
         {
-            var updatedEntry = await _userService.UpdateAsync<UserResponse>(id, createRequest, UserId);
+            var updatedEntry = await _userService.UpdateAsync<UserResponse>(id, registerRequest, UserId);
             return updatedEntry;
         }
 

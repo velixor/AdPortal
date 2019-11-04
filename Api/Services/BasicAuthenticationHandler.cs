@@ -36,7 +36,7 @@ namespace Api.Services
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] {':'}, 2);
                 var email = credentials[0];
                 var password = credentials[1];
-                user = await _userService.AuthenticateAsync<UserResponse>(new UserAuthRequest
+                user = await _userService.LoginAsync<UserResponse>(new UserLoginRequest
                     {Email = email, Password = password});
             }
             catch

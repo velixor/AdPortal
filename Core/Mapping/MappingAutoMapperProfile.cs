@@ -14,9 +14,10 @@ namespace Core.Mapping
             CreateMap<AdUpdateRequest, Ad>();
             CreateMap<AdCreateRequest, Ad>();
 
-            CreateMap<UserCreateRequest, User>();
-            CreateMap<UserAuthRequest, User>();
+            CreateMap<UserRegisterRequest, User>();
+            CreateMap<UserRegisterRequest, UserLoginRequest>();
             CreateMap<User, UserResponse>();
+            CreateMap<User, UserLoggedResponse>();
         }
     }
 }
