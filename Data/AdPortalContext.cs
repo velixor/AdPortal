@@ -29,8 +29,9 @@ namespace Data
                 .WithOne(ad => ad.User)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<User>()
-                .HasIndex(user => user.Name)
+                .HasIndex(user => user.Email)
                 .IsUnique();
+                
         }
     }
 }
