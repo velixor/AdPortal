@@ -82,3 +82,10 @@ Notes:
 | `==*`      | Case-insensitive string Equals |
 | `!@=*`     | Case-insensitive string does not Contains |
 | `!_=*`     | Case-insensitive string does not Starts with |
+
+# MVC
+## Account features
+![](https://sun9-62.userapi.com/c854024/v854024022/157917/5n6hBr85ffM.jpg)
+![](https://sun9-34.userapi.com/c854024/v854024022/157927/FsFR4yjmajg.jpg)
+![](https://sun9-23.userapi.com/c854024/v854024022/15792f/5h9Q_c-Y_QQ.jpg)
+![](https://sun9-1.userapi.com/c854024/v854024022/157937/9kXT7vuCVjg.jpg)
