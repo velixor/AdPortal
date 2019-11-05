@@ -19,6 +19,9 @@ namespace Core.Mapping
             mapper.Property<User>(user => user.Name)
                 .CanSort()
                 .CanFilter();
+            mapper.Property<User>(user => user.Email)
+                .CanSort()
+                .CanFilter();
             mapper.Property<User>(user => user.Ads.Count)
                 .CanSort()
                 .CanFilter()
@@ -35,6 +38,7 @@ namespace Core.Mapping
                 .CanFilter()
                 .HasName("created");
             mapper.Property<Ad>(ad => ad.Content)
+                .CanSort()
                 .CanFilter();
 
             return mapper;

@@ -1,33 +1,47 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using Data;
 using Dto.Contracts.UserContracts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mvc.Services;
+using Sieve.Models;
 
 namespace Mvc.Controllers
 {
     [Authorize]
     public class UsersController : Controller
     {
-        private readonly AdPortalContext _context;
         private readonly IUserService _userService;
         private readonly IIdentityService _identityService;
 
-        public UsersController(AdPortalContext context, IUserService userService, IIdentityService identityService)
+        public UsersController(IUserService userService, IIdentityService identityService)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] SieveModel sieveModel)
         {
-            return View(_userService.Get<UserResponse>());
+            var properties = typeof(UserResponse).GetProperties().Select(x => x.Name).ToList();
+            if (sieveModel.Sorts != null)
+            {
+                var sortTerm = sieveModel.GetSortsParsed().First();
+                properties.Remove(sortTerm.Name);
+                ViewData[sortTerm.Name] = sortTerm.Descending
+                    ? sortTerm.Name
+                    : $"-{sortTerm.Name}";
+            }
+            properties.ForEach(x => ViewData[x] = x);
+            
+            ViewData["CurrentSieve"] = sieveModel;
+
+            return View(_userService.Get<UserResponse>(sieveModel));
         }
+
 
         [AllowAnonymous]
         public async Task<IActionResult> Details(Guid? id)
@@ -46,7 +60,7 @@ namespace Mvc.Controllers
 
             return View(user);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Delete()
         {
@@ -90,6 +104,7 @@ namespace Mvc.Controllers
                 ModelState.AddModelError("", "Incorrect login or password");
                 return View(user);
             }
+
             return RedirectToAction(nameof(Index));
         }
 

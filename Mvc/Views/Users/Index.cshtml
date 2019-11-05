@@ -1,4 +1,6 @@
-﻿@model Dto.Contracts.PagingResponse<Dto.Contracts.UserContracts.UserResponse>
+﻿@using Mvc.Extensions
+@using Sieve.Models
+@model Dto.Contracts.PagingResponse<Dto.Contracts.UserContracts.UserResponse>
 
 
 @{
@@ -7,18 +9,45 @@
 
 <h1>Users</h1>
 
-
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="SearchString" value="@((ViewData["CurrentSieve"] as SieveModel)?.GetFiltersParsed()?.Single()?.Names[0] ?? "")"/>
+            <input type="submit" value="Search" class="btn btn-primary"/> |
+            <a asp-action="Index">Back to full List</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Items[0].Name)
+            <a asp-action="Index"
+               asp-route-sorts="@ViewData["Name"]"
+               asp-route-filters="@(((SieveModel) ViewData["CurrentSieve"]).Filters)"
+               asp-route-page="@(((SieveModel) ViewData["CurrentSieve"]).Page)"
+               asp-route-pagesize="@(((SieveModel) ViewData["CurrentSieve"]).PageSize)">
+                @Html.DisplayNameFor(model => model.Items[0].Name)
+            </a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Items[0].Email)
+            <a asp-action="Index"
+               asp-route-sorts="@ViewData["Email"]"
+               asp-route-filters="@(((SieveModel) ViewData["CurrentSieve"]).Filters)"
+               asp-route-page="@(((SieveModel) ViewData["CurrentSieve"]).Page)"
+               asp-route-pagesize="@(((SieveModel) ViewData["CurrentSieve"]).PageSize)">
+                @Html.DisplayNameFor(model => model.Items[0].Email)
+            </a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Items[0].AdsCount)
+            <a asp-action="Index"
+               asp-route-sorts="@ViewData["AdsCount"]"
+               asp-route-filters="@(((SieveModel) ViewData["CurrentSieve"]).Filters)"
+               asp-route-page="@(((SieveModel) ViewData["CurrentSieve"]).Page)"
+               asp-route-pagesize="@(((SieveModel) ViewData["CurrentSieve"]).PageSize)">
+                @Html.DisplayNameFor(model => model.Items[0].AdsCount)
+            </a>
         </th>
         <th></th>
     </tr>
@@ -40,3 +69,37 @@
     }
     </tbody>
 </table>
+<nav aria-label="Page navigation example">
+    <span class="container text-muted">Total user: @Model.Count</span>
+    
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="PageSize1" name="PageSize" class="custom-control-input" checked>
+        <label class="custom-control-label" for="PageSize1">10</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="PageSize2" name="PageSize" class="custom-control-input">
+        <label class="custom-control-label" for="PageSize2">50</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="PageSize3" name="PageSize" class="custom-control-input">
+        <label class="custom-control-label" for="PageSize3">100</label>
+    </div>
+    
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
