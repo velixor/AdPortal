@@ -47,6 +47,7 @@ namespace Mvc.Controllers
             return View(user);
         }
         
+        [HttpPost]
         public async Task<IActionResult> Delete()
         {
             await _userService.DeleteByIdAsync(_identityService.User.Id, _identityService.User.Id);
@@ -84,7 +85,11 @@ namespace Mvc.Controllers
         {
             if (!ModelState.IsValid) return View(user);
             var logged = await _identityService.LoginAsync(user);
-            if (!logged) return View(user);
+            if (!logged)
+            {
+                ModelState.AddModelError("", "Incorrect login or password");
+                return View(user);
+            }
             return RedirectToAction(nameof(Index));
         }
 
